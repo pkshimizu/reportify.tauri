@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import RText from '../components/display/text';
 import { RCenter } from '../components/layout/flex-box';
+import ActivityCalendar from '../features/activity-calendar/calendar';
 
 export const Route = createFileRoute('/calendar')({
   component: Calendar,
@@ -9,7 +9,7 @@ export const Route = createFileRoute('/calendar')({
 function Calendar() {
   return (
     <RCenter>
-      <RText>Calendar</RText>
+      <ActivityCalendar />
     </RCenter>
   );
 }
