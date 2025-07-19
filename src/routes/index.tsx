@@ -1,4 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
+import RText from '../components/display/text';
+import { RCenter } from '../components/layout/flex-box';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -6,8 +8,8 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className='p-2'>
-      <h3>Welcome Home!</h3>
-    </div>
+    <RCenter>
+      <RText>Welcome reportify</RText>
+    </RCenter>
   );
 }

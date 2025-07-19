@@ -1,6 +1,10 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import RText from '../components/display/text';
+import RCalendarIcon from '../components/icons/calendar';
+import RHomeIcon from '../components/icons/home';
+import RSettingIcon from '../components/icons/setting';
+import RIconButton from '../components/input/icon-button';
 import { RRow, RSpaceBetween } from '../components/layout/flex-box';
 import RAppBar from '../components/surface/app-bar';
 
@@ -8,15 +12,18 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <RAppBar>
-        <RSpaceBetween>
+        <RSpaceBetween align='center'>
           <RText>Reportify</RText>
           <RRow gap={1}>
-            <Link to='/' className='[&.active]:font-bold'>
-              Home
-            </Link>{' '}
-            <Link to='/about' className='[&.active]:font-bold'>
-              About
-            </Link>
+            <RIconButton>
+              <RHomeIcon />
+            </RIconButton>
+            <RIconButton>
+              <RCalendarIcon />
+            </RIconButton>
+            <RIconButton>
+              <RSettingIcon />
+            </RIconButton>
           </RRow>
         </RSpaceBetween>
       </RAppBar>
