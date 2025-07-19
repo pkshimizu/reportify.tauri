@@ -99,7 +99,7 @@ export default function ActivityCalendar() {
         </RIconButton>
       </RSpaceBetween>
 
-      <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]} gap={1}>
+      <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]} gap={0.5}>
         {weekDays.map(day => (
           <RCenter key={day}>
             <RText align='center'>{day}</RText>
@@ -107,7 +107,7 @@ export default function ActivityCalendar() {
         ))}
       </RGrid>
 
-      <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]}>
+      <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]} gap={0.5}>
         {calendarDays.map((date, index) => {
           return (
             <RSquareBox size={80} key={index} align='center' justify='center'>
