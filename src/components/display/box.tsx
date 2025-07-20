@@ -1,10 +1,11 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
+import { MainColor, bgColor } from '../../models/color';
 
 interface Props {
   width?: number;
   height?: number;
-  bgcolor?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+  bgcolor?: MainColor;
   align?: 'center' | 'start' | 'end';
   justify?: 'center' | 'start' | 'end';
   aspectRatio?: number;
@@ -17,7 +18,7 @@ export default function RBox(props: Props) {
       sx={{
         ...(props.width && { width: props.width }),
         ...(props.height && { height: props.height }),
-        ...(props.bgcolor && { bgcolor: props.bgcolor }),
+        ...(props.bgcolor && { bgcolor: bgColor(props.bgcolor) }),
         ...(props.align && { alignContent: props.align }),
         ...(props.justify && { justifyContent: props.justify }),
         ...(props.aspectRatio && { aspectRatio: props.aspectRatio }),

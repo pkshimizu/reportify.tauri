@@ -13,6 +13,7 @@ import {
   RSpaceBetween,
 } from '../../components/layout/flex-box';
 import RGrid from '../../components/layout/grid';
+import RLink from '../../components/navigation/link';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthNames = [
@@ -80,6 +81,27 @@ export default function ActivityCalendar() {
     return days;
   };
 
+  const isCurrentMonth = (date: Date) => {
+    return (
+      date.getMonth() === currentMonth.getMonth() &&
+      date.getFullYear() === currentMonth.getFullYear()
+    );
+  };
+
+  const getWeekDayColor = (day: string) => {
+    if (day === 'Sun') return 'sun';
+    if (day === 'Sat') return 'sat';
+    return 'weekday';
+  };
+
+  const getDayColor = (date: Date) => {
+    if (!isCurrentMonth(date)) return 'outside';
+    const day = date.getDay();
+    if (day === 0) return 'sun';
+    if (day === 6) return 'sat';
+    return 'weekday';
+  };
+
   const calendarDays = generateCalendarDays();
 
   return (
@@ -102,7 +124,9 @@ export default function ActivityCalendar() {
       <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]} gap={0.5}>
         {weekDays.map(day => (
           <RCenter key={day}>
-            <RText align='center'>{day}</RText>
+            <RText align='center' color={getWeekDayColor(day)}>
+              {day}
+            </RText>
           </RCenter>
         ))}
       </RGrid>
@@ -110,9 +134,13 @@ export default function ActivityCalendar() {
       <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]} gap={0.5}>
         {calendarDays.map((date, index) => {
           return (
-            <RSquareBox size={80} key={index} align='center' justify='center'>
-              <RText align='center'>{date.getDate()}</RText>
-            </RSquareBox>
+            <RLink href={`/dates/${date.toISOString()}`} key={index}>
+              <RSquareBox size={80} align='center' justify='center'>
+                <RText align='center' color={getDayColor(date)}>
+                  {date.getDate()}
+                </RText>
+              </RSquareBox>
+            </RLink>
           );
         })}
       </RGrid>

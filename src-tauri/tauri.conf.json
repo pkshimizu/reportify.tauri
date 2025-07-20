@@ -14,9 +14,9 @@
       {
         "title": "reportify",
         "width": 800,
-        "height": 640,
+        "height": 660,
         "minWidth": 800,
-        "minHeight": 640
+        "minHeight": 660
       }
     ],
     "security": {
