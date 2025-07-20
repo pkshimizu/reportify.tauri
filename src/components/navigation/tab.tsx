@@ -32,7 +32,9 @@ export default function RTab(props: Props) {
           />
         ))}
       </Tabs>
-      {props.items.find(item => item.value === props.value)?.panel}
+      <RBox m={2}>
+        {props.items.find(item => item.value === props.value)?.panel}
+      </RBox>
     </RBox>
   );
 }

@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import RText from '../components/display/text';
 import RTab from '../components/navigation/tab';
+import SettingsGeneral from '../features/settings/general';
+import SettingsServices from '../features/settings/services';
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
@@ -13,11 +14,11 @@ function Settings() {
   return (
     <RTab
       items={[
-        { label: 'General', value: 'general', panel: <RText>General</RText> },
+        { label: 'General', value: 'general', panel: <SettingsGeneral /> },
         {
           label: 'Services',
           value: 'services',
-          panel: <RText>Services</RText>,
+          panel: <SettingsServices />,
         },
       ]}
       value={tab}

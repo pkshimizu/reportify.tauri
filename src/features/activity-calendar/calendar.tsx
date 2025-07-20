@@ -121,7 +121,10 @@ export default function ActivityCalendar() {
         </RIconButton>
       </RSpaceBetween>
 
-      <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]} gap={0.5}>
+      <RGrid
+        columns={['1fr', '1fr', '1fr', '1fr', '1fr', '1fr', '1fr']}
+        gap={0.5}
+      >
         {weekDays.map(day => (
           <RCenter key={day}>
             <RText align='center' color={getWeekDayColor(day)}>
@@ -131,7 +134,10 @@ export default function ActivityCalendar() {
         ))}
       </RGrid>
 
-      <RGrid columnFrs={[1, 1, 1, 1, 1, 1, 1]} gap={0.5}>
+      <RGrid
+        columns={['1fr', '1fr', '1fr', '1fr', '1fr', '1fr', '1fr']}
+        gap={0.5}
+      >
         {calendarDays.map((date, index) => {
           return (
             <RLink href={`/dates/${date.toISOString()}`} key={index}>

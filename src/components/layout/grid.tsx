@@ -2,8 +2,8 @@ import { Box } from '@mui/material';
 import React from 'react';
 
 interface Props {
-  columnFrs?: number[];
-  rowFrs?: number[];
+  columns?: string[];
+  rows?: string[];
   gap?: number;
   rowGap?: number;
   columnGap?: number;
@@ -31,11 +31,11 @@ interface Props {
 export default function RGrid(props: Props) {
   const gridStyles = {
     display: 'grid',
-    ...(props.columnFrs && {
-      gridTemplateColumns: props.columnFrs.map(fr => `${fr}fr`).join(' '),
+    ...(props.columns && {
+      gridTemplateColumns: props.columns.join(' '),
     }),
-    ...(props.rowFrs && {
-      gridTemplateRows: props.rowFrs.map(fr => `${fr}fr`).join(' '),
+    ...(props.rows && {
+      gridTemplateRows: props.rows.join(' '),
     }),
     ...(props.gap !== undefined && { gap: props.gap }),
     ...(props.rowGap !== undefined && { rowGap: props.rowGap }),
