@@ -15,11 +15,12 @@ interface Props {
 export default function RBox(props: Props) {
   return (
     <Box
+      display='flex'
       sx={{
         ...(props.width && { width: props.width }),
         ...(props.height && { height: props.height }),
         ...(props.bgcolor && { bgcolor: bgColor(props.bgcolor) }),
-        ...(props.align && { alignContent: props.align }),
+        ...(props.align && { alignItems: props.align }),
         ...(props.justify && { justifyContent: props.justify }),
         ...(props.aspectRatio && { aspectRatio: props.aspectRatio }),
       }}

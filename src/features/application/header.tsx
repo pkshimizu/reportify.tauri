@@ -1,29 +1,54 @@
-import { useNavigate } from '@tanstack/react-router';
+import { useRouterState } from '@tanstack/react-router';
+import { RSquareBox } from '../../components/display/box';
 import RText from '../../components/display/text';
 import RCalendarIcon from '../../components/icons/calendar';
 import RHomeIcon from '../../components/icons/home';
 import RSettingIcon from '../../components/icons/setting';
-import RIconButton from '../../components/input/icon-button';
 import { RRow, RSpaceBetween } from '../../components/layout/flex-box';
+import RLink from '../../components/navigation/link';
 import RAppBar from '../../components/surface/app-bar';
 
 export default function ApplicationHeader() {
-  const navigate = useNavigate();
+  const routerState = useRouterState();
 
   return (
     <RAppBar>
       <RSpaceBetween align='center'>
         <RText>reportify</RText>
         <RRow gap={1}>
-          <RIconButton onClick={() => navigate({ to: '/' })}>
-            <RHomeIcon />
-          </RIconButton>
-          <RIconButton onClick={() => navigate({ to: '/calendar' })}>
-            <RCalendarIcon />
-          </RIconButton>
-          <RIconButton onClick={() => navigate({ to: '/settings' })}>
-            <RSettingIcon />
-          </RIconButton>
+          <RLink href='/'>
+            <RSquareBox size={40} align='center' justify='center'>
+              <RHomeIcon
+                color={
+                  routerState.location.pathname === '/'
+                    ? 'secondary'
+                    : 'inherit'
+                }
+              />
+            </RSquareBox>
+          </RLink>
+          <RLink href='/calendar'>
+            <RSquareBox size={40} align='center' justify='center'>
+              <RCalendarIcon
+                color={
+                  routerState.location.pathname === '/calendar'
+                    ? 'secondary'
+                    : 'inherit'
+                }
+              />
+            </RSquareBox>
+          </RLink>
+          <RLink href='/settings'>
+            <RSquareBox size={40} align='center' justify='center'>
+              <RSettingIcon
+                color={
+                  routerState.location.pathname === '/settings'
+                    ? 'secondary'
+                    : 'inherit'
+                }
+              />
+            </RSquareBox>
+          </RLink>
         </RRow>
       </RSpaceBetween>
     </RAppBar>

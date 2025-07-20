@@ -44,3 +44,8 @@ export function bgColor(color?: Color) {
       return `${color}.main`;
   }
 }
+
+export function iconColor(color?: MainColor) {
+  if (!color) return undefined;
+  return color;
+}
