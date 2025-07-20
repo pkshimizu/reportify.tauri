@@ -20,9 +20,7 @@ export default function ApplicationHeader() {
             <RSquareBox size={40} align='center' justify='center'>
               <RHomeIcon
                 color={
-                  routerState.location.pathname === '/'
-                    ? 'secondary'
-                    : 'inherit'
+                  routerState.location.pathname === '/' ? 'primary' : 'inherit'
                 }
               />
             </RSquareBox>
@@ -32,7 +30,7 @@ export default function ApplicationHeader() {
               <RCalendarIcon
                 color={
                   routerState.location.pathname === '/calendar'
-                    ? 'secondary'
+                    ? 'primary'
                     : 'inherit'
                 }
               />
@@ -43,7 +41,7 @@ export default function ApplicationHeader() {
               <RSettingIcon
                 color={
                   routerState.location.pathname === '/settings'
-                    ? 'secondary'
+                    ? 'primary'
                     : 'inherit'
                 }
               />
