@@ -1,4 +1,5 @@
 export type MainColor =
+  | 'inherit'
   | 'primary'
   | 'secondary'
   | 'error'
@@ -13,6 +14,8 @@ export type Color = MainColor | DayColor;
 export function textColor(color?: Color) {
   if (!color) return undefined;
   switch (color) {
+    case 'inherit':
+      return 'inherit';
     case 'weekday':
       return 'text.primary';
     case 'sat':
@@ -29,6 +32,8 @@ export function textColor(color?: Color) {
 export function bgColor(color?: Color) {
   if (!color) return undefined;
   switch (color) {
+    case 'inherit':
+      return 'inherit';
     case 'weekday':
       return 'background.paper';
     case 'sat':

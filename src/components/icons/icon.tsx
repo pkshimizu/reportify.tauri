@@ -1,15 +1,9 @@
 import { SvgIcon } from '@mui/material';
 import { ElementType } from 'react';
+import { MainColor, textColor } from '../../models/color';
 
 export interface IconProps {
-  color?:
-    | 'inherit'
-    | 'primary'
-    | 'secondary'
-    | 'error'
-    | 'info'
-    | 'success'
-    | 'warning';
+  color?: MainColor;
 }
 
 interface Props extends IconProps {
@@ -17,5 +11,5 @@ interface Props extends IconProps {
 }
 
 export default function RIcon(props: Props) {
-  return <SvgIcon component={props.icon} color={props.color} />;
+  return <SvgIcon component={props.icon} color={textColor(props.color)} />;
 }

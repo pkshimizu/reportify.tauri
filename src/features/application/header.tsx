@@ -13,7 +13,7 @@ export default function ApplicationHeader() {
   return (
     <RAppBar>
       <RSpaceBetween align='center'>
-        <RText>Reportify</RText>
+        <RText>reportify</RText>
         <RRow gap={1}>
           <RIconButton onClick={() => navigate({ to: '/' })}>
             <RHomeIcon />
