@@ -3,7 +3,9 @@
     "allow": [
       "Bash(yarn add:*)",
       "Bash(yarn dev)",
-      "Bash(yarn lint:*)"
+      "Bash(yarn lint:*)",
+      "Bash(tsc)",
+      "Bash(yarn tsc:*)"
     ],
     "deny": []
   }
