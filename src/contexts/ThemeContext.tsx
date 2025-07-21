@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Theme } from '../models/theme';
+import { Settings, Theme } from '../models/settings';
 
 interface ThemeContextType {
   theme: Theme;
@@ -33,10 +33,10 @@ export function ThemeProvider(props: ThemeProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadCurrentTheme = async () => {
+    const loadTheme = async () => {
       try {
-        const currentTheme = await invoke<string>('get_theme');
-        setThemeState(currentTheme.toLowerCase() as Theme);
+        const settings = await invoke<Settings>('get_settings');
+        setThemeState(settings.theme.toLowerCase() as Theme);
       } catch (error) {
         console.error('Failed to load current theme:', error);
         setThemeState('light');
@@ -45,7 +45,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
       }
     };
 
-    loadCurrentTheme();
+    loadTheme();
   }, []);
 
   const setTheme = async (newTheme: Theme) => {
