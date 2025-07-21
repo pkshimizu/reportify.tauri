@@ -1,3 +1,3 @@
-pub mod sqlite_theme_repository;
+pub mod sqlite_settings_repository;
 
-pub use sqlite_theme_repository::SqliteThemeRepository;
+pub use sqlite_settings_repository::SqliteSettingsRepository;

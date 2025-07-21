@@ -1,3 +1,3 @@
-pub mod theme_repository;
+pub mod settings_repository;
 
-pub use theme_repository::ThemeRepository;
+pub use settings_repository::SettingsRepository;

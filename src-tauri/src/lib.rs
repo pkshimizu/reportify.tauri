@@ -5,9 +5,9 @@ mod domain;
 mod infrastructure;
 mod presentation;
 
-use application::usecases::ThemeUseCase;
-use infrastructure::{database::DatabaseConnection, repositories::SqliteThemeRepository};
-use presentation::commands::{get_theme, update_theme};
+use application::usecases::SettingsUseCase;
+use infrastructure::{database::DatabaseConnection, repositories::SqliteSettingsRepository};
+use presentation::commands::{get_settings, update_theme};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -17,13 +17,15 @@ pub fn run() {
         DatabaseConnection::new(database_url).expect("Failed to establish database connection");
 
     // Dependency injection setup
-    let theme_repository = Arc::new(SqliteThemeRepository::new(db_connection.get_connection()));
-    let theme_usecase = Arc::new(ThemeUseCase::new(theme_repository));
+    let settings_repository = Arc::new(SqliteSettingsRepository::new(
+        db_connection.get_connection(),
+    ));
+    let settings_usecase = Arc::new(SettingsUseCase::new(settings_repository));
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .manage(theme_usecase)
-        .invoke_handler(tauri::generate_handler![get_theme, update_theme,])
+        .manage(settings_usecase)
+        .invoke_handler(tauri::generate_handler![get_settings, update_theme,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,3 +1,3 @@
-pub mod theme_usecase;
+pub mod settings_usecase;
 
-pub use theme_usecase::ThemeUseCase;
+pub use settings_usecase::SettingsUseCase;
