@@ -1,10 +1,23 @@
-use crate::domain::{entities::Theme, repositories::ThemeRepository};
-use crate::infrastructure::database::{models::*, schema::theme_settings};
+use std::sync::{
+    Arc,
+    Mutex,
+};
+
 use anyhow::Result;
 use async_trait::async_trait;
 use chrono::Utc;
 use diesel::prelude::*;
-use std::sync::{Arc, Mutex};
+
+use crate::{
+    domain::{
+        entities::Theme,
+        repositories::ThemeRepository,
+    },
+    infrastructure::database::{
+        models::*,
+        schema::theme_settings,
+    },
+};
 
 pub struct SqliteThemeRepository {
     db_connection: Arc<Mutex<SqliteConnection>>,
@@ -22,40 +35,42 @@ impl ThemeRepository for SqliteThemeRepository {
         let conn = Arc::clone(&self.db_connection);
         let result = tokio::task::spawn_blocking(move || -> Result<Theme> {
             let mut connection = conn.lock().unwrap();
-            
+
             let theme_setting: ThemeSetting = theme_settings::table
                 .filter(theme_settings::id.eq(1))
                 .first(&mut *connection)
                 .map_err(|e| anyhow::anyhow!("Database error: {}", e))?;
-            
+
             Theme::from_string(&theme_setting.theme_name)
                 .map_err(|e| anyhow::anyhow!("Theme parsing error: {}", e))
-        }).await??;
-        
+        })
+        .await??;
+
         Ok(result)
     }
 
     async fn update_theme(&self, theme: Theme) -> Result<()> {
         let conn = Arc::clone(&self.db_connection);
         let theme_str = theme.to_string();
-        
+
         tokio::task::spawn_blocking(move || -> Result<()> {
             let mut connection = conn.lock().unwrap();
             let now = Utc::now().naive_utc();
-            
+
             let update_theme = UpdateThemeSetting {
                 theme_name: &theme_str,
                 updated_at: now,
             };
-            
+
             diesel::update(theme_settings::table.filter(theme_settings::id.eq(1)))
                 .set(&update_theme)
                 .execute(&mut *connection)
                 .map_err(|e| anyhow::anyhow!("Database update error: {}", e))?;
-            
+
             Ok(())
-        }).await??;
-        
+        })
+        .await??;
+
         Ok(())
     }
 }

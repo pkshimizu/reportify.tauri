@@ -1,5 +1,6 @@
-use diesel::prelude::*;
 use chrono::NaiveDateTime;
+use diesel::prelude::*;
+
 use crate::infrastructure::database::schema::theme_settings;
 
 #[derive(Queryable, Identifiable, Debug)]

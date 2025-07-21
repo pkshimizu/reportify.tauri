@@ -29,3 +29,13 @@ diesel = { version = "2.1", features = ["sqlite", "chrono"] }
 diesel_migrations = "2.1"
 chrono = { version = "0.4", features = ["serde"] }
 
+# Additional linting and formatting tools
+[dev-dependencies]
+clippy = "0.0.302"
+
+# Cargo aliases for linting and formatting
+[alias]
+lint = "clippy --all-targets --all-features -- -D warnings"
+format = "fmt --all"
+check-format = "fmt --all -- --check"
+

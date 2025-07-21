@@ -5,7 +5,8 @@
       "Bash(yarn dev)",
       "Bash(yarn lint:*)",
       "Bash(tsc)",
-      "Bash(yarn tsc:*)"
+      "Bash(yarn tsc:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }

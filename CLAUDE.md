@@ -14,6 +14,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn tauri build` - Build production Tauri application
 - `yarn tauri` - Access Tauri CLI commands
 
+### Backend Development (Rust)
+- `cd src-tauri && cargo fmt` - Format Rust code
+- `cd src-tauri && cargo lint` - Run Clippy linter
+- `cd src-tauri && cargo check-format` - Check if code is properly formatted
+- `cd src-tauri && cargo check` - Compile check without building
+
 ### Individual Commands
 - `tsc` - TypeScript type checking
 - `vite build` - Build frontend assets only
@@ -30,9 +36,11 @@ This is a Tauri v2 application combining React (TypeScript) frontend with Rust b
 
 ### Backend (Rust + Tauri)
 - **Entry point**: `src-tauri/src/main.rs` → calls `src-tauri/src/lib.rs::run()`
-- **Tauri commands**: Defined in `lib.rs` with `#[tauri::command]` macro
-- **Current commands**: `greet(name: &str) -> String`
+- **Architecture**: Clean Architecture pattern with Domain, Application, Infrastructure, and Presentation layers
+- **Database**: SQLite with Diesel ORM for data persistence
+- **Tauri commands**: Theme management (`get_theme`, `update_theme`)
 - **Plugins**: Uses `tauri-plugin-opener` for system integration
+- **Code Quality**: Configured with rustfmt formatter and clippy linter
 
 ### Configuration
 - **Tauri config**: `src-tauri/tauri.conf.json`

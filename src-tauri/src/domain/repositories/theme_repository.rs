@@ -1,5 +1,6 @@
-use crate::domain::entities::Theme;
 use anyhow::Result;
+
+use crate::domain::entities::Theme;
 
 #[async_trait::async_trait]
 pub trait ThemeRepository: Send + Sync {

@@ -1,11 +1,21 @@
 pub mod models;
 pub mod schema;
 
+use std::sync::{
+    Arc,
+    Mutex,
+};
+
 use anyhow::Result;
-use diesel::prelude::*;
-use diesel::sqlite::SqliteConnection;
-use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-use std::sync::{Arc, Mutex};
+use diesel::{
+    prelude::*,
+    sqlite::SqliteConnection,
+};
+use diesel_migrations::{
+    embed_migrations,
+    EmbeddedMigrations,
+    MigrationHarness,
+};
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
@@ -17,7 +27,7 @@ impl DatabaseConnection {
     pub fn new(database_url: &str) -> Result<Self> {
         let connection = SqliteConnection::establish(database_url)?;
         let connection = Arc::new(Mutex::new(connection));
-        
+
         // Run migrations
         {
             let mut conn = connection.lock().unwrap();
