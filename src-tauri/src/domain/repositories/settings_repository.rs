@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use crate::domain::entities::{Settings, Theme};
+use crate::domain::models::{Settings, Theme};
 
 #[async_trait::async_trait]
 pub trait SettingsRepository: Send + Sync {

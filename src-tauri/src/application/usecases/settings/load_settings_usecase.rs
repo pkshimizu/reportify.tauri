@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use anyhow::Result;
 
-use crate::domain::{entities::Settings, repositories::SettingsRepository};
+use crate::domain::{models::Settings, repositories::SettingsRepository};
 
 pub struct LoadSettingsUseCase {
     settings_repository: Arc<dyn SettingsRepository>,

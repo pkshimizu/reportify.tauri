@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use tauri::State;
 
-use crate::domain::{entities::Theme};
+use crate::domain::{models::Theme};
 use crate::application::usecases::{settings::LoadSettingsUseCase, settings::SaveThemeUseCase};
 
 #[tauri::command]

@@ -7,7 +7,7 @@ use diesel::prelude::*;
 
 use crate::{
     domain::{
-        entities::{Settings, Theme},
+        models::{Settings, Theme},
         repositories::SettingsRepository,
     },
     infrastructure::database::{models::*, schema::settings},
