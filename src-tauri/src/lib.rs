@@ -6,13 +6,18 @@ mod application;
 mod presentation;
 
 use application::usecases::ThemeUseCase;
-use infrastructure::repositories::InMemoryThemeRepository;
+use infrastructure::{database::DatabaseConnection, repositories::SqliteThemeRepository};
 use presentation::commands::{get_theme, update_theme};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // Database setup
+    let database_url = "reportify.db";
+    let db_connection = DatabaseConnection::new(database_url)
+        .expect("Failed to establish database connection");
+    
     // Dependency injection setup
-    let theme_repository = Arc::new(InMemoryThemeRepository::new());
+    let theme_repository = Arc::new(SqliteThemeRepository::new(db_connection.get_connection()));
     let theme_usecase = Arc::new(ThemeUseCase::new(theme_repository));
 
     tauri::Builder::default()
