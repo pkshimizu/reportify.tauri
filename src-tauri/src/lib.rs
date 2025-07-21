@@ -5,7 +5,7 @@ mod domain;
 mod infrastructure;
 mod presentation;
 
-use application::usecases::SettingsUseCase;
+use application::usecases::{settings::LoadSettingsUseCase, settings::SaveThemeUseCase};
 use infrastructure::{database::DatabaseConnection, repositories::SqliteSettingsRepository};
 use presentation::commands::{get_settings, update_theme};
 
@@ -20,11 +20,13 @@ pub fn run() {
     let settings_repository = Arc::new(SqliteSettingsRepository::new(
         db_connection.get_connection(),
     ));
-    let settings_usecase = Arc::new(SettingsUseCase::new(settings_repository));
+    let load_settings_usecase = Arc::new(LoadSettingsUseCase::new(settings_repository.clone()));
+    let save_theme_usecase = Arc::new(SaveThemeUseCase::new(settings_repository.clone()));
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .manage(settings_usecase)
+        .manage(load_settings_usecase)
+        .manage(save_theme_usecase)
         .invoke_handler(tauri::generate_handler![get_settings, update_theme,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

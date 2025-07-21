@@ -2,13 +2,14 @@ use std::sync::Arc;
 
 use tauri::State;
 
-use crate::{application::usecases::SettingsUseCase, domain::entities::Theme};
+use crate::application::usecases::{settings::LoadSettingsUseCase, settings::SaveThemeUseCase};
+use crate::domain::entities::Theme;
 
 #[tauri::command]
 pub async fn get_settings(
-    settings_usecase: State<'_, Arc<SettingsUseCase>>,
+    load_settings_usecase: State<'_, Arc<LoadSettingsUseCase>>,
 ) -> Result<serde_json::Value, String> {
-    match settings_usecase.get_settings().await {
+    match load_settings_usecase.execute().await {
         Ok(settings) => {
             let json = serde_json::json!({
                 "theme": settings.theme.to_string(),
@@ -23,12 +24,12 @@ pub async fn get_settings(
 #[tauri::command]
 pub async fn update_theme(
     theme: String,
-    settings_usecase: State<'_, Arc<SettingsUseCase>>,
+    save_theme_usecase: State<'_, Arc<SaveThemeUseCase>>,
 ) -> Result<(), String> {
     let theme = Theme::from_string(&theme).map_err(|e| format!("Invalid theme: {e}"))?;
 
-    settings_usecase
-        .update_theme(theme)
+    save_theme_usecase
+        .execute(theme)
         .await
         .map_err(|e| format!("Failed to update theme: {e}"))
 }
