@@ -2,11 +2,11 @@ use std::sync::Arc;
 
 use tauri::State;
 
+use crate::domain::{entities::Theme};
 use crate::application::usecases::{settings::LoadSettingsUseCase, settings::SaveThemeUseCase};
-use crate::domain::entities::Theme;
 
 #[tauri::command]
-pub async fn get_settings(
+pub async fn load_settings(
     load_settings_usecase: State<'_, Arc<LoadSettingsUseCase>>,
 ) -> Result<serde_json::Value, String> {
     match load_settings_usecase.execute().await {
@@ -22,7 +22,7 @@ pub async fn get_settings(
 }
 
 #[tauri::command]
-pub async fn update_theme(
+pub async fn save_theme(
     theme: String,
     save_theme_usecase: State<'_, Arc<SaveThemeUseCase>>,
 ) -> Result<(), String> {

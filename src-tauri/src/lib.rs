@@ -7,7 +7,7 @@ mod presentation;
 
 use application::usecases::{settings::LoadSettingsUseCase, settings::SaveThemeUseCase};
 use infrastructure::{database::DatabaseConnection, repositories::SqliteSettingsRepository};
-use presentation::commands::{get_settings, update_theme};
+use presentation::commands::{load_settings, save_theme};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -27,7 +27,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .manage(load_settings_usecase)
         .manage(save_theme_usecase)
-        .invoke_handler(tauri::generate_handler![get_settings, update_theme,])
+        .invoke_handler(tauri::generate_handler![load_settings, save_theme,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

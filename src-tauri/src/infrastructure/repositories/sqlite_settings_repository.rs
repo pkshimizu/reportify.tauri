@@ -25,7 +25,7 @@ impl SqliteSettingsRepository {
 
 #[async_trait]
 impl SettingsRepository for SqliteSettingsRepository {
-    async fn get_settings(&self) -> Result<Settings> {
+    async fn load_settings(&self) -> Result<Settings> {
         let conn = Arc::clone(&self.db_connection);
         let result = tokio::task::spawn_blocking(move || -> Result<Settings> {
             let mut connection = conn.lock().unwrap();
@@ -46,7 +46,7 @@ impl SettingsRepository for SqliteSettingsRepository {
         Ok(result)
     }
 
-    async fn update_theme(&self, theme: Theme) -> Result<()> {
+    async fn save_theme(&self, theme: Theme) -> Result<()> {
         let conn = Arc::clone(&self.db_connection);
         let theme_str = theme.to_string();
 

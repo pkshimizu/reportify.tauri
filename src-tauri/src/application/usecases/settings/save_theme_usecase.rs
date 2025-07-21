@@ -16,6 +16,6 @@ impl SaveThemeUseCase {
     }
 
     pub async fn execute(&self, theme: Theme) -> Result<()> {
-        self.settings_repository.update_theme(theme).await
+        self.settings_repository.save_theme(theme).await
     }
 }

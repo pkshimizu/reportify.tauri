@@ -16,6 +16,6 @@ impl LoadSettingsUseCase {
     }
 
     pub async fn execute(&self) -> Result<Settings> {
-        self.settings_repository.get_settings().await
+        self.settings_repository.load_settings().await
     }
 }

@@ -35,7 +35,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
   useEffect(() => {
     const loadTheme = async () => {
       try {
-        const settings = await invoke<Settings>('get_settings');
+        const settings = await invoke<Settings>('load_settings');
         setThemeState(settings.theme.toLowerCase() as Theme);
       } catch (error) {
         console.error('Failed to load current theme:', error);
@@ -50,7 +50,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
 
   const setTheme = async (newTheme: Theme) => {
     try {
-      await invoke('update_theme', { theme: newTheme });
+      await invoke('save_theme', { theme: newTheme });
       setThemeState(newTheme);
     } catch (error) {
       console.error('Failed to update theme:', error);
