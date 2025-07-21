@@ -11,14 +11,21 @@ use presentation::commands::{load_settings, save_theme};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    tokio::runtime::Runtime::new()
+        .unwrap()
+        .block_on(async { run_async().await });
+}
+
+async fn run_async() {
     // Database setup
-    let database_url = "reportify.db";
-    let db_connection =
-        DatabaseConnection::new(database_url).expect("Failed to establish database connection");
+    let database_url = "sqlite://reportify.db";
+    let db_connection = DatabaseConnection::new(database_url)
+        .await
+        .expect("Failed to establish database connection");
 
     // Dependency injection setup
     let settings_repository = Arc::new(DbSettingsRepository::new(
-        db_connection.get_connection(),
+        db_connection.get_connection().clone(),
     ));
     let load_settings_usecase = Arc::new(LoadSettingsUseCase::new(settings_repository.clone()));
     let save_theme_usecase = Arc::new(SaveThemeUseCase::new(settings_repository.clone()));

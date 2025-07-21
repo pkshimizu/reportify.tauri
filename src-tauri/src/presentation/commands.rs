@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use tauri::State;
 
-use crate::domain::{models::Theme};
 use crate::application::usecases::{settings::LoadSettingsUseCase, settings::SaveThemeUseCase};
+use crate::domain::models::Theme;
 
 #[tauri::command]
 pub async fn load_settings(

@@ -1,34 +1,25 @@
-pub mod models;
-pub mod schema;
-
-use std::sync::{Arc, Mutex};
+pub mod entities;
+pub mod migration;
 
 use anyhow::Result;
-use diesel::{prelude::*, sqlite::SqliteConnection};
-use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-
-pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
+use migration::{Migrator, MigratorTrait};
+use sea_orm::{Database, DatabaseConnection as SeaOrmDatabaseConnection};
 
 pub struct DatabaseConnection {
-    connection: Arc<Mutex<SqliteConnection>>,
+    connection: SeaOrmDatabaseConnection,
 }
 
 impl DatabaseConnection {
-    pub fn new(database_url: &str) -> Result<Self> {
-        let connection = SqliteConnection::establish(database_url)?;
-        let connection = Arc::new(Mutex::new(connection));
+    pub async fn new(database_url: &str) -> Result<Self> {
+        let connection = Database::connect(database_url).await?;
 
         // Run migrations
-        {
-            let mut conn = connection.lock().unwrap();
-            conn.run_pending_migrations(MIGRATIONS)
-                .map_err(|e| anyhow::anyhow!("Failed to run migrations: {}", e))?;
-        }
+        Migrator::up(&connection, None).await?;
 
         Ok(Self { connection })
     }
 
-    pub fn get_connection(&self) -> Arc<Mutex<SqliteConnection>> {
-        Arc::clone(&self.connection)
+    pub fn get_connection(&self) -> &SeaOrmDatabaseConnection {
+        &self.connection
     }
 }
