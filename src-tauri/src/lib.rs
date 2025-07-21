@@ -6,14 +6,8 @@ mod infrastructure;
 mod presentation;
 
 use application::usecases::ThemeUseCase;
-use infrastructure::{
-    database::DatabaseConnection,
-    repositories::SqliteThemeRepository,
-};
-use presentation::commands::{
-    get_theme,
-    update_theme,
-};
+use infrastructure::{database::DatabaseConnection, repositories::SqliteThemeRepository};
+use presentation::commands::{get_theme, update_theme};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

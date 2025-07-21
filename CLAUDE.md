@@ -15,10 +15,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn tauri` - Access Tauri CLI commands
 
 ### Backend Development (Rust)
-- `cd src-tauri && cargo fmt` - Format Rust code
-- `cd src-tauri && cargo lint` - Run Clippy linter
-- `cd src-tauri && cargo check-format` - Check if code is properly formatted
-- `cd src-tauri && cargo check` - Compile check without building
+- `cd src-tauri && make format` - Format Rust code
+- `cd src-tauri && make lint` - Run Clippy linter with strict warnings
+- `cd src-tauri && make check-format` - Check if code is properly formatted
+- `cd src-tauri && make check` - Compile check without building
+- `cd src-tauri && make ci` - Run all quality checks (format, lint, test)
+- `cd src-tauri && make dev` - Format code and run quick checks
 
 ### Individual Commands
 - `tsc` - TypeScript type checking

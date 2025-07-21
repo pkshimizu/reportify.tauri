@@ -1,28 +1,27 @@
-#[derive(Debug, Clone, PartialEq)]
+use std::fmt;
+
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Theme {
+    #[default]
     Light,
     Dark,
 }
 
 impl Theme {
-    pub fn to_string(&self) -> String {
-        match self {
-            Theme::Light => "light".to_string(),
-            Theme::Dark => "dark".to_string(),
-        }
-    }
-
     pub fn from_string(s: &str) -> Result<Self, String> {
         match s {
             "light" => Ok(Theme::Light),
             "dark" => Ok(Theme::Dark),
-            _ => Err(format!("Invalid theme: {}", s)),
+            _ => Err(format!("Invalid theme: {s}")),
         }
     }
 }
 
-impl Default for Theme {
-    fn default() -> Self {
-        Theme::Light
+impl fmt::Display for Theme {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Theme::Light => write!(f, "light"),
+            Theme::Dark => write!(f, "dark"),
+        }
     }
 }

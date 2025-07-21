@@ -2,10 +2,7 @@ use std::sync::Arc;
 
 use anyhow::Result;
 
-use crate::domain::{
-    entities::Theme,
-    repositories::ThemeRepository,
-};
+use crate::domain::{entities::Theme, repositories::ThemeRepository};
 
 pub struct ThemeUseCase {
     theme_repository: Arc<dyn ThemeRepository>,

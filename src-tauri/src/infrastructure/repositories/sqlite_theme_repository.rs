@@ -1,7 +1,4 @@
-use std::sync::{
-    Arc,
-    Mutex,
-};
+use std::sync::{Arc, Mutex};
 
 use anyhow::Result;
 use async_trait::async_trait;
@@ -9,14 +6,8 @@ use chrono::Utc;
 use diesel::prelude::*;
 
 use crate::{
-    domain::{
-        entities::Theme,
-        repositories::ThemeRepository,
-    },
-    infrastructure::database::{
-        models::*,
-        schema::theme_settings,
-    },
+    domain::{entities::Theme, repositories::ThemeRepository},
+    infrastructure::database::{models::*, schema::theme_settings},
 };
 
 pub struct SqliteThemeRepository {

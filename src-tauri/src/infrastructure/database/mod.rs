@@ -1,21 +1,11 @@
 pub mod models;
 pub mod schema;
 
-use std::sync::{
-    Arc,
-    Mutex,
-};
+use std::sync::{Arc, Mutex};
 
 use anyhow::Result;
-use diesel::{
-    prelude::*,
-    sqlite::SqliteConnection,
-};
-use diesel_migrations::{
-    embed_migrations,
-    EmbeddedMigrations,
-    MigrationHarness,
-};
+use diesel::{prelude::*, sqlite::SqliteConnection};
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
