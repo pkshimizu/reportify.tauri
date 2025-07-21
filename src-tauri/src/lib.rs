@@ -6,7 +6,7 @@ mod infrastructure;
 mod presentation;
 
 use application::usecases::{settings::LoadSettingsUseCase, settings::SaveThemeUseCase};
-use infrastructure::{database::DatabaseConnection, repositories::SqliteSettingsRepository};
+use infrastructure::{database::DatabaseConnection, repositories::DbSettingsRepository};
 use presentation::commands::{load_settings, save_theme};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -17,7 +17,7 @@ pub fn run() {
         DatabaseConnection::new(database_url).expect("Failed to establish database connection");
 
     // Dependency injection setup
-    let settings_repository = Arc::new(SqliteSettingsRepository::new(
+    let settings_repository = Arc::new(DbSettingsRepository::new(
         db_connection.get_connection(),
     ));
     let load_settings_usecase = Arc::new(LoadSettingsUseCase::new(settings_repository.clone()));

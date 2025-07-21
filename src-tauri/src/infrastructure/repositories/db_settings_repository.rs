@@ -13,18 +13,18 @@ use crate::{
     infrastructure::database::{models::*, schema::settings},
 };
 
-pub struct SqliteSettingsRepository {
+pub struct DbSettingsRepository {
     db_connection: Arc<Mutex<SqliteConnection>>,
 }
 
-impl SqliteSettingsRepository {
+impl DbSettingsRepository {
     pub fn new(db_connection: Arc<Mutex<SqliteConnection>>) -> Self {
         Self { db_connection }
     }
 }
 
 #[async_trait]
-impl SettingsRepository for SqliteSettingsRepository {
+impl SettingsRepository for DbSettingsRepository {
     async fn load_settings(&self) -> Result<Settings> {
         let conn = Arc::clone(&self.db_connection);
         let result = tokio::task::spawn_blocking(move || -> Result<Settings> {
