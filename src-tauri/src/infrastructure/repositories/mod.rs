@@ -1,3 +1,3 @@
-pub mod db_settings_repository;
+pub mod settings_db_repository;
 
-pub use db_settings_repository::DbSettingsRepository;
+pub use settings_db_repository::SettingsDbRepository;

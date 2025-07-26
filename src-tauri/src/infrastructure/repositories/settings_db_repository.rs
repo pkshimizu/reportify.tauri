@@ -11,18 +11,18 @@ use crate::{
     infrastructure::database::entities::{settings, SettingsEntity},
 };
 
-pub struct DbSettingsRepository {
+pub struct SettingsDbRepository {
     db_connection: DatabaseConnection,
 }
 
-impl DbSettingsRepository {
+impl SettingsDbRepository {
     pub fn new(db_connection: DatabaseConnection) -> Self {
         Self { db_connection }
     }
 }
 
 #[async_trait]
-impl SettingsRepository for DbSettingsRepository {
+impl SettingsRepository for SettingsDbRepository {
     async fn load_settings(&self) -> Result<Settings> {
         let settings_record = SettingsEntity::find_by_id(1)
             .one(&self.db_connection)
