@@ -12,6 +12,11 @@ export default function SettingsGithub() {
   const [personalAccessToken, setPersonalAccessToken] = useState('');
   const { githubs, createGithub, deleteGithub } = useSettings();
 
+  const handleCreateGithub = () => {
+    createGithub(personalAccessToken);
+    setPersonalAccessToken('');
+  };
+
   return (
     <RGrid columns={['240px', '1fr']} alignItems='start'>
       <RText>Personal Access Token</RText>
@@ -21,7 +26,7 @@ export default function SettingsGithub() {
             value={personalAccessToken}
             onChange={setPersonalAccessToken}
           />
-          <RIconButton onClick={() => createGithub(personalAccessToken)}>
+          <RIconButton onClick={handleCreateGithub}>
             <RAddIcon />
           </RIconButton>
         </RGrid>
