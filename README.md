@@ -11,7 +11,7 @@ Reportifyは、React（TypeScript）フロントエンドとRustバックエン�
 #### フロントエンド
 
 - **React 18** + **TypeScript** - UIフレームワーク
-- **Vite** - 高速ビルドツール  
+- **Vite** - 高速ビルドツール
 - **Material-UI** - UIコンポーネントライブラリ
 - **TanStack Router** - ルーティング
 - **Emotion** - CSS-in-JS
