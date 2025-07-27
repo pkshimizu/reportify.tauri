@@ -18,26 +18,10 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(Activities::Service)
-                            .string()
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(Activities::ActivityType)
-                            .string()
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(Activities::Summary)
-                            .string()
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(Activities::Detail)
-                            .text()
-                            .not_null(),
-                    )
+                    .col(ColumnDef::new(Activities::Service).string().not_null())
+                    .col(ColumnDef::new(Activities::ActivityType).string().not_null())
+                    .col(ColumnDef::new(Activities::Summary).string().not_null())
+                    .col(ColumnDef::new(Activities::Detail).text().not_null())
                     .col(
                         ColumnDef::new(Activities::CreatedAt)
                             .timestamp_with_time_zone()

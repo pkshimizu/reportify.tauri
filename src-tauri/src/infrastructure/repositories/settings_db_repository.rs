@@ -5,10 +5,13 @@ use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, Set};
 
 use crate::{
     domain::{
-        models::{Settings, Theme},
+        models::settings::{Settings, SettingsGithub},
+        models::Theme,
         repositories::SettingsRepository,
     },
-    infrastructure::database::entities::{settings, SettingsEntity},
+    infrastructure::database::entities::{
+        settings, settings_github, SettingsEntity, SettingsGithubEntity,
+    },
 };
 
 pub struct SettingsDbRepository {
@@ -46,6 +49,58 @@ impl SettingsRepository for SettingsDbRepository {
         active_model.updated_at = Set(Utc::now());
 
         active_model.update(&self.db_connection).await?;
+
+        Ok(())
+    }
+
+    async fn load_githubs(&self) -> Result<Vec<SettingsGithub>> {
+        let github_settings = SettingsGithubEntity::find()
+            .all(&self.db_connection)
+            .await?;
+
+        let settings = github_settings
+            .into_iter()
+            .map(|record| {
+                SettingsGithub::new(
+                    record.id,
+                    record.personal_access_token,
+                    record.created_at,
+                    record.updated_at,
+                )
+            })
+            .collect();
+
+        Ok(settings)
+    }
+
+    async fn create_github(&self, personal_access_token: String) -> Result<SettingsGithub> {
+        let now = Utc::now();
+        let active_model = settings_github::ActiveModel {
+            id: sea_orm::NotSet,
+            personal_access_token: Set(personal_access_token),
+            created_at: Set(now),
+            updated_at: Set(now),
+        };
+
+        let result = active_model.insert(&self.db_connection).await?;
+
+        Ok(SettingsGithub::new(
+            result.id,
+            result.personal_access_token,
+            result.created_at,
+            result.updated_at,
+        ))
+    }
+
+    async fn delete_github(&self, id: i32) -> Result<()> {
+        let github_setting = SettingsGithubEntity::find_by_id(id)
+            .one(&self.db_connection)
+            .await?
+            .ok_or_else(|| anyhow::anyhow!("GitHub setting not found"))?;
+
+        SettingsGithubEntity::delete_by_id(github_setting.id)
+            .exec(&self.db_connection)
+            .await?;
 
         Ok(())
     }
