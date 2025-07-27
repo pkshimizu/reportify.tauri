@@ -48,9 +48,9 @@ pub async fn load_githubs(
                 .map(|github| {
                     serde_json::json!({
                         "id": github.id,
-                        "personal_access_token": github.personal_access_token,
-                        "created_at": github.created_at.to_rfc3339(),
-                        "updated_at": github.updated_at.to_rfc3339()
+                        "personalAccessToken": github.personal_access_token,
+                        "createdAt": github.created_at.to_rfc3339(),
+                        "updatedAt": github.updated_at.to_rfc3339()
                     })
                 })
                 .collect();
@@ -69,9 +69,9 @@ pub async fn create_github(
         Ok(github) => {
             let json = serde_json::json!({
                 "id": github.id,
-                "personal_access_token": github.personal_access_token,
-                "created_at": github.created_at.to_rfc3339(),
-                "updated_at": github.updated_at.to_rfc3339()
+                "personalAccessToken": github.personal_access_token,
+                "createdAt": github.created_at.to_rfc3339(),
+                "updatedAt": github.updated_at.to_rfc3339()
             });
             Ok(json)
         }

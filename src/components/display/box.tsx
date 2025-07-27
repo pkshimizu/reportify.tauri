@@ -50,6 +50,7 @@ export default function RBox(props: Props) {
         ...(props.pb && { paddingBottom: props.pb }),
         ...(props.pl && { paddingLeft: props.pl }),
         ...(props.px && { paddingLeft: props.px, paddingRight: props.px }),
+        flexGrow: 1,
       }}
     >
       {props.children}

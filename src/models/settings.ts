@@ -3,3 +3,8 @@ export interface Settings {
   theme: Theme;
   language: string;
 }
+
+export interface GitHubSettings {
+  id: number;
+  personalAccessToken: string;
+}
