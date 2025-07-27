@@ -1,19 +1,19 @@
+import { RSquareBox } from '@/components/display/box';
+import RText from '@/components/display/text';
+import RIconButton from '@/components/input/icon-button';
 import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
 } from '@mui/icons-material';
 import { useState } from 'react';
-import { RSquareBox } from '../../components/display/box';
-import RText from '../../components/display/text';
-import RIconButton from '../../components/input/icon-button';
 import {
   RCenter,
   RColumn,
   RRow,
   RSpaceBetween,
-} from '../../components/layout/flex-box';
-import RGrid from '../../components/layout/grid';
-import RLink from '../../components/navigation/link';
+} from '@/components/layout/flex-box';
+import RGrid from '@/components/layout/grid';
+import RLink from '@/components/navigation/link';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthNames = [

@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import RText from '../../components/display/text';
-import RAddIcon from '../../components/icons/add';
-import RRemoveIcon from '../../components/icons/remove';
-import RIconButton from '../../components/input/icon-button';
-import RTextField from '../../components/input/text-field';
-import { RColumn } from '../../components/layout/flex-box';
-import RGrid from '../../components/layout/grid';
-import useSettings from '../../hooks/settings';
+import RText from '@/components/display/text';
+import RAddIcon from '@/components/icons/add';
+import RRemoveIcon from '@/components/icons/remove';
+import RIconButton from '@/components/input/icon-button';
+import RTextField from '@/components/input/text-field';
+import { RColumn } from '@/components/layout/flex-box';
+import RGrid from '@/components/layout/grid';
+import useSettings from '@/hooks/settings';
 
 export default function SettingsGithub() {
   const [personalAccessToken, setPersonalAccessToken] = useState('');

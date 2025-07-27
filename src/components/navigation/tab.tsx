@@ -1,6 +1,6 @@
+import RBox from '@/components/display/box';
 import { Tab, Tabs } from '@mui/material';
 import { ReactNode } from 'react';
-import RBox from '../display/box';
 
 interface Item {
   label: string;

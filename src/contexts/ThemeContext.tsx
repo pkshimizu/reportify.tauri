@@ -1,3 +1,4 @@
+import { Settings, Theme } from '@/models/settings';
 import { invoke } from '@tauri-apps/api/core';
 import {
   ReactNode,
@@ -6,7 +7,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Settings, Theme } from '../models/settings';
 
 interface ThemeContextType {
   theme: Theme;

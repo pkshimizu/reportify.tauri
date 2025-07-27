@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { Color, textColor } from '../../models/color';
+import { Color, textColor } from '@/models/color';
 
 interface Props {
   align?: 'center' | 'start' | 'end';

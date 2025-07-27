@@ -7,8 +7,8 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
-import { routeTree } from './routeTree.gen';
+import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { routeTree } from '@/routeTree.gen';
 
 const router = createRouter({ routeTree });
 

@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 import { useEffect, useState } from 'react';
-import { GitHubSettings } from '../models/settings';
+import { GitHubSettings } from '@/models/settings';
 
 export default function useSettings() {
   const [githubs, setGithubs] = useState<GitHubSettings[]>([]);

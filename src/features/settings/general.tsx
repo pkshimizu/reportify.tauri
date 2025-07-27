@@ -1,10 +1,10 @@
-import RText from '../../components/display/text';
-import RDarkIcon from '../../components/icons/dark';
-import RLightIcon from '../../components/icons/light';
-import RToggleButton from '../../components/input/toggle-button';
-import RGrid from '../../components/layout/grid';
-import { useTheme } from '../../contexts/ThemeContext';
-import { Theme } from '../../models/settings';
+import RText from '@/components/display/text';
+import RDarkIcon from '@/components/icons/dark';
+import RLightIcon from '@/components/icons/light';
+import RToggleButton from '@/components/input/toggle-button';
+import RGrid from '@/components/layout/grid';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Theme } from '@/models/settings';
 
 export default function SettingsGeneral() {
   const { theme, setTheme, isLoading } = useTheme();

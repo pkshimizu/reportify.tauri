@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import RTab from '../components/navigation/tab';
-import SettingsGeneral from '../features/settings/general';
-import SettingsGithub from '../features/settings/github';
+import RTab from '@/components/navigation/tab';
+import SettingsGeneral from '@/features/settings/general';
+import SettingsGithub from '@/features/settings/github';
 
 export const Route = createFileRoute('/settings')({
   component: Settings,

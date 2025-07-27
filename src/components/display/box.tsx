@@ -1,6 +1,6 @@
+import { MainColor, bgColor } from '@/models/color';
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
-import { MainColor, bgColor } from '../../models/color';
 
 interface Props {
   width?: number;

@@ -1,6 +1,6 @@
 import { SvgIcon } from '@mui/material';
 import { ElementType } from 'react';
-import { MainColor, iconColor } from '../../models/color';
+import { MainColor, iconColor } from '@/models/color';
 
 export interface IconProps {
   color?: MainColor;

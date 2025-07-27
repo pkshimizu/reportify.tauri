@@ -1,12 +1,12 @@
 import { useRouterState } from '@tanstack/react-router';
-import { RSquareBox } from '../../components/display/box';
-import RText from '../../components/display/text';
-import RCalendarIcon from '../../components/icons/calendar';
-import RHomeIcon from '../../components/icons/home';
-import RSettingIcon from '../../components/icons/setting';
-import { RRow, RSpaceBetween } from '../../components/layout/flex-box';
-import RLink from '../../components/navigation/link';
-import RAppBar from '../../components/surface/app-bar';
+import { RSquareBox } from '@/components/display/box';
+import RText from '@/components/display/text';
+import RCalendarIcon from '@/components/icons/calendar';
+import RHomeIcon from '@/components/icons/home';
+import RSettingIcon from '@/components/icons/setting';
+import { RRow, RSpaceBetween } from '@/components/layout/flex-box';
+import RLink from '@/components/navigation/link';
+import RAppBar from '@/components/surface/app-bar';
 
 export default function ApplicationHeader() {
   const routerState = useRouterState();
