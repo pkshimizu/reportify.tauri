@@ -4,6 +4,7 @@ pub use sea_orm_migration::MigratorTrait;
 
 mod m20240721_000001_create_settings_table;
 mod m20250127_000001_create_activities_table;
+mod m20250127_000002_create_settings_github_table;
 
 pub struct Migrator;
 
@@ -13,6 +14,7 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20240721_000001_create_settings_table::Migration),
             Box::new(m20250127_000001_create_activities_table::Migration),
+            Box::new(m20250127_000002_create_settings_github_table::Migration),
         ]
     }
 }
