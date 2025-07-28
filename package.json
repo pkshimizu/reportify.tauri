@@ -26,7 +26,8 @@
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@tanstack/router-plugin": "^1.128.4",

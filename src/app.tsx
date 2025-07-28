@@ -5,8 +5,8 @@ import {
 } from '@mui/material/styles';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
-import { useTheme } from '@/contexts/ThemeContext';
 import { routeTree } from '@/routeTree.gen';
+import useSettings from './hooks/settings';
 
 const router = createRouter({ routeTree });
 
@@ -17,7 +17,7 @@ declare module '@tanstack/react-router' {
 }
 
 export function AppContent() {
-  const { theme } = useTheme();
+  const { theme } = useSettings();
 
   const muiTheme = createTheme({
     palette: {
