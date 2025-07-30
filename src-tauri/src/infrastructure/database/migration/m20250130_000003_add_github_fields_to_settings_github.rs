@@ -10,7 +10,11 @@ impl MigrationTrait for Migration {
             .alter_table(
                 Table::alter()
                     .table(SettingsGithub::Table)
-                    .add_column(ColumnDef::new(SettingsGithub::GithubId).integer().not_null())
+                    .add_column(
+                        ColumnDef::new(SettingsGithub::GithubId)
+                            .integer()
+                            .not_null(),
+                    )
                     .to_owned(),
             )
             .await?;

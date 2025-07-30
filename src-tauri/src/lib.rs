@@ -9,7 +9,10 @@ use application::usecases::settings::{
     CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
     SaveThemeUseCase,
 };
-use infrastructure::{database::DatabaseConnection, repositories::{GithubApiRestRepository, SettingsDbRepository}};
+use infrastructure::{
+    database::DatabaseConnection,
+    repositories::{GithubApiRestRepository, SettingsDbRepository},
+};
 use presentation::commands::{
     create_github, delete_github, load_githubs, load_settings, save_theme,
 };
@@ -47,7 +50,10 @@ async fn run_async() {
 
     // GitHub settings use cases
     let load_githubs_usecase = Arc::new(LoadGithubsUseCase::new(settings_repository.clone()));
-    let create_github_usecase = Arc::new(CreateGithubUseCase::new(settings_repository.clone(), github_api_repository.clone()));
+    let create_github_usecase = Arc::new(CreateGithubUseCase::new(
+        settings_repository.clone(),
+        github_api_repository.clone(),
+    ));
     let delete_github_usecase = Arc::new(DeleteGithubUseCase::new(settings_repository.clone()));
 
     tauri::Builder::default()

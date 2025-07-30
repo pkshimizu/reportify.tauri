@@ -3,8 +3,7 @@ use anyhow::Result;
 use crate::domain::models::github::GitHubUser;
 use crate::domain::repositories::GithubApiRepository;
 
-pub struct GithubApiRestRepository {
-}
+pub struct GithubApiRestRepository {}
 
 impl GithubApiRestRepository {
     pub fn new() -> Self {

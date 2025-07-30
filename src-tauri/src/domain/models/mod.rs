@@ -1,7 +1,7 @@
+pub mod github;
 pub mod settings;
 pub mod theme;
-pub mod github;
 
+pub use github::GitHubUser;
 pub use settings::Settings;
 pub use theme::Theme;
-pub use github::GitHubUser;

@@ -12,7 +12,10 @@ pub struct CreateGithubUseCase {
 }
 
 impl CreateGithubUseCase {
-    pub fn new(settings_repository: Arc<dyn SettingsRepository>, github_api_repository: Arc<dyn GithubApiRepository>) -> Self {
+    pub fn new(
+        settings_repository: Arc<dyn SettingsRepository>,
+        github_api_repository: Arc<dyn GithubApiRepository>,
+    ) -> Self {
         Self {
             settings_repository,
             github_api_repository,
@@ -20,7 +23,10 @@ impl CreateGithubUseCase {
     }
 
     pub async fn execute(&self, personal_access_token: String) -> Result<SettingsGithub> {
-        let user = self.github_api_repository.get_user(personal_access_token.clone()).await?;
+        let user = self
+            .github_api_repository
+            .get_user(personal_access_token.clone())
+            .await?;
         self.settings_repository
             .create_github(user, personal_access_token)
             .await
