@@ -73,10 +73,11 @@ impl SettingsRepository for SettingsDbRepository {
         Ok(settings)
     }
 
-    async fn create_github(&self, personal_access_token: String) -> Result<SettingsGithub> {
+    async fn create_github(&self, username: String, personal_access_token: String) -> Result<SettingsGithub> {
         let now = Utc::now();
         let active_model = settings_github::ActiveModel {
             id: sea_orm::NotSet,
+            username: Set(username),
             personal_access_token: Set(personal_access_token),
             created_at: Set(now),
             updated_at: Set(now),
