@@ -22,7 +22,7 @@ impl CreateGithubUseCase {
     pub async fn execute(&self, personal_access_token: String) -> Result<SettingsGithub> {
         let user = self.github_api_repository.get_user(personal_access_token.clone()).await?;
         self.settings_repository
-            .create_github(user.username, personal_access_token)
+            .create_github(user, personal_access_token)
             .await
     }
 }

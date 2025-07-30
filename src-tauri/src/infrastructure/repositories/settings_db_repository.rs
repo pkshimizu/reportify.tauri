@@ -5,8 +5,7 @@ use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, Set};
 
 use crate::{
     domain::{
-        models::settings::{Settings, SettingsGithub},
-        models::Theme,
+        models::{settings::{Settings, SettingsGithub}, GitHubUser, Theme},
         repositories::SettingsRepository,
     },
     infrastructure::database::entities::{
@@ -73,11 +72,13 @@ impl SettingsRepository for SettingsDbRepository {
         Ok(settings)
     }
 
-    async fn create_github(&self, username: String, personal_access_token: String) -> Result<SettingsGithub> {
+    async fn create_github(&self, user: GitHubUser, personal_access_token: String) -> Result<SettingsGithub> {
         let now = Utc::now();
         let active_model = settings_github::ActiveModel {
             id: sea_orm::NotSet,
-            username: Set(username),
+            username: Set(user.username),
+            github_id: Set(user.id),
+            avatar_url: Set(user.avatar_url),
             personal_access_token: Set(personal_access_token),
             created_at: Set(now),
             updated_at: Set(now),

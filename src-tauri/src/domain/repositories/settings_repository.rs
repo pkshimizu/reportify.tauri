@@ -1,7 +1,7 @@
 use anyhow::Result;
 
 use crate::domain::models::settings::{Settings, SettingsGithub};
-use crate::domain::models::Theme;
+use crate::domain::models::{GitHubUser, Theme};
 
 #[async_trait::async_trait]
 pub trait SettingsRepository: Send + Sync {
@@ -10,6 +10,6 @@ pub trait SettingsRepository: Send + Sync {
 
     // GitHub settings methods
     async fn load_githubs(&self) -> Result<Vec<SettingsGithub>>;
-    async fn create_github(&self, username: String, personal_access_token: String) -> Result<SettingsGithub>;
+    async fn create_github(&self, user: GitHubUser, personal_access_token: String) -> Result<SettingsGithub>;
     async fn delete_github(&self, id: i32) -> Result<()>;
 }

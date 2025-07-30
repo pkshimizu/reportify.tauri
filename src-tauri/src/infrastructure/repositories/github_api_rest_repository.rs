@@ -18,7 +18,7 @@ impl GithubApiRepository for GithubApiRestRepository {
         Ok(GitHubUser {
             id: 1,
             username: "test".to_string(),
-            avatar_url: "https://github.com/test.png".to_string(),
+            avatar_url: Some("https://github.com/test.png".to_string()),
         })
     }
 }
