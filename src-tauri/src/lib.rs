@@ -22,9 +22,18 @@ pub fn run() {
 }
 
 async fn run_async() {
-    // Database setup
-    let database_url = "sqlite://reportify.db";
-    let db_connection = DatabaseConnection::new(database_url)
+    // Database setup - use platform-specific app data directory
+    let app_data_path = dirs::data_dir()
+        .expect("Failed to get data directory")
+        .join("reportify");
+
+    std::fs::create_dir_all(&app_data_path).expect("Failed to create app data directory");
+
+    let database_path = app_data_path.join("reportify.db");
+    let database_url = format!("sqlite://{}?mode=rwc", database_path.display());
+    println!("Database URL: {}", database_url);
+
+    let db_connection = DatabaseConnection::new(&database_url)
         .await
         .expect("Failed to establish database connection");
 
