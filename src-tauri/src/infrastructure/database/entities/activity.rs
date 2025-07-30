@@ -11,6 +11,7 @@ pub struct Model {
     pub activity_type: String,
     pub summary: String,
     pub detail: String,
+    pub original_url: Option<String>,
     pub created_at: DateTime<Utc>,
 }
 
