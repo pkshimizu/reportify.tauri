@@ -34,7 +34,7 @@ async fn run_async() {
 
     let database_path = app_data_path.join("reportify.db");
     let database_url = format!("sqlite://{}?mode=rwc", database_path.display());
-    println!("Database URL: {}", database_url);
+    println!("Database URL: {database_url}");
 
     let db_connection = DatabaseConnection::new(&database_url)
         .await
