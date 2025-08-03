@@ -5,7 +5,7 @@ pub struct GitHubUser {
     pub avatar_url: Option<String>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[allow(dead_code)]
 pub struct GitHubEvent {
     pub id: String,
@@ -17,7 +17,7 @@ pub struct GitHubEvent {
     pub created_at: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[allow(dead_code)]
 pub struct GitHubEventActor {
     pub id: i32,
@@ -25,7 +25,7 @@ pub struct GitHubEventActor {
     pub avatar_url: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[allow(dead_code)]
 pub struct GitHubEventRepo {
     pub id: i32,
