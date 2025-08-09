@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use tauri::State;
 
+use crate::application::usecases::fetcher::FetchGitHubEventsUseCase;
 use crate::application::usecases::settings::{
     CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
     SaveThemeUseCase,
@@ -88,4 +89,14 @@ pub async fn delete_github(
         .execute(id)
         .await
         .map_err(|e| format!("Failed to delete GitHub setting: {e}"))
+}
+
+#[tauri::command]
+pub async fn fetch_github_events(
+    fetch_github_events_usecase: State<'_, Arc<FetchGitHubEventsUseCase>>,
+) -> Result<(), String> {
+    fetch_github_events_usecase
+        .execute()
+        .await
+        .map_err(|e| format!("Failed to fetch GitHub events: {e}"))
 }
