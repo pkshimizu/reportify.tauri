@@ -17,7 +17,7 @@ pub struct GitHubEvent {
     pub repo: GitHubEventRepo,
     pub payload: serde_json::Value,
     pub public: bool,
-    pub created_at: String,
+    pub created_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -40,18 +40,13 @@ impl GitHubEvent {
         let (summary, detail) = self.extract_summary_and_detail();
         let original_url = self.generate_original_url();
 
-        // Parse the created_at string to DateTime<Utc>
-        let created_at = DateTime::parse_from_rfc3339(&self.created_at)
-            .unwrap_or_else(|_| DateTime::parse_from_rfc3339("1970-01-01T00:00:00Z").unwrap())
-            .with_timezone(&Utc);
-
         Activity {
             service: "github".to_string(),
             activity_type: self.event_type.clone(),
             summary,
             detail,
             original_url,
-            created_at,
+            created_at: self.created_at,
         }
     }
 

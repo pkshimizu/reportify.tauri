@@ -115,7 +115,9 @@ impl GithubApiRepository for GithubApiRestRepository {
                 },
                 payload: event.payload,
                 public: event.public,
-                created_at: event.created_at,
+                created_at: chrono::DateTime::parse_from_rfc3339(&event.created_at)
+                    .map(|dt| dt.with_timezone(&chrono::Utc))
+                    .unwrap_or_else(|_| chrono::Utc::now()),
             })
             .collect();
 

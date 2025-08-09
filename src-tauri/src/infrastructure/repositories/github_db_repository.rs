@@ -36,11 +36,6 @@ impl GitHubRepository for GitHubDbRepository {
         // Serialize payload to JSON string
         let payload_json = serde_json::to_string(&event.payload)?;
 
-        // Parse created_at from string to DateTime
-        let created_at = chrono::DateTime::parse_from_rfc3339(&event.created_at)
-            .map_err(|e| anyhow::anyhow!("Failed to parse created_at: {}", e))?
-            .with_timezone(&Utc);
-
         let active_model = github_event::ActiveModel {
             id: sea_orm::NotSet,
             event_id: Set(event.id),
@@ -52,7 +47,7 @@ impl GitHubRepository for GitHubDbRepository {
             repo_name: Set(event.repo.name),
             payload: Set(payload_json),
             public: Set(event.public),
-            created_at: Set(created_at),
+            created_at: Set(event.created_at),
             updated_at: Set(now),
         };
 
