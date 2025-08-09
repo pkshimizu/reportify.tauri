@@ -13,7 +13,6 @@ pub struct GitHubDbRepository {
 }
 
 impl GitHubDbRepository {
-    #[allow(dead_code)]
     pub fn new(db_connection: DatabaseConnection) -> Self {
         Self { db_connection }
     }
