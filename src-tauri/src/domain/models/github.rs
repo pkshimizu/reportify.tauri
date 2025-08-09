@@ -36,7 +36,7 @@ pub struct GitHubEventRepo {
 }
 
 impl GitHubEvent {
-    pub fn to_activity(&self, activity_id: i32) -> Activity {
+    pub fn to_activity(&self) -> Activity {
         let (summary, detail) = self.extract_summary_and_detail();
         let original_url = self.generate_original_url();
 
@@ -46,7 +46,6 @@ impl GitHubEvent {
             .with_timezone(&Utc);
 
         Activity {
-            id: activity_id,
             service: "github".to_string(),
             activity_type: self.event_type.clone(),
             summary,

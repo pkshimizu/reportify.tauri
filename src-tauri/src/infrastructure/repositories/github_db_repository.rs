@@ -1,11 +1,11 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use chrono::Utc;
-use sea_orm::{ActiveModelTrait, DatabaseConnection, Set};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 
 use crate::{
     domain::{models::github::GitHubEvent, repositories::GitHubRepository},
-    infrastructure::database::entities::github_event,
+    infrastructure::database::entities::{github_event, GitHubEventEntity},
 };
 
 pub struct GitHubDbRepository {
@@ -21,7 +21,16 @@ impl GitHubDbRepository {
 
 #[async_trait]
 impl GitHubRepository for GitHubDbRepository {
-    async fn save_event(&self, event: GitHubEvent) -> Result<()> {
+    async fn save_event(&self, event: GitHubEvent) -> Result<bool> {
+        let existing_event = GitHubEventEntity::find()
+            .filter(github_event::Column::EventId.eq(event.id.clone()))
+            .one(&self.db_connection)
+            .await?;
+
+        if existing_event.is_some() {
+            return Ok(false);
+        }
+
         let now = Utc::now();
 
         // Serialize payload to JSON string
@@ -49,6 +58,6 @@ impl GitHubRepository for GitHubDbRepository {
 
         active_model.insert(&self.db_connection).await?;
 
-        Ok(())
+        Ok(true)
     }
 }

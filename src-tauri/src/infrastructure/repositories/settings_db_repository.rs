@@ -65,6 +65,9 @@ impl SettingsRepository for SettingsDbRepository {
             .map(|record| {
                 SettingsGithub::new(
                     record.id,
+                    record.username,
+                    record.github_id,
+                    record.avatar_url,
                     record.personal_access_token,
                     record.created_at,
                     record.updated_at,
@@ -95,6 +98,9 @@ impl SettingsRepository for SettingsDbRepository {
 
         Ok(SettingsGithub::new(
             result.id,
+            result.username,
+            result.github_id,
+            result.avatar_url,
             result.personal_access_token,
             result.created_at,
             result.updated_at,

@@ -1,0 +1,55 @@
+use std::sync::Arc;
+
+use anyhow::Result;
+
+use crate::domain::models::github::GitHubEvent;
+use crate::domain::repositories::{
+    ActivityRepository, GitHubRepository, GithubApiRepository, SettingsRepository,
+};
+
+pub struct FetchGitHubEventsUseCase {
+    settings_repository: Arc<dyn SettingsRepository>,
+    github_api_repository: Arc<dyn GithubApiRepository>,
+    github_repository: Arc<dyn GitHubRepository>,
+    activity_repository: Arc<dyn ActivityRepository>,
+}
+
+impl FetchGitHubEventsUseCase {
+    pub fn new(
+        settings_repository: Arc<dyn SettingsRepository>,
+        github_api_repository: Arc<dyn GithubApiRepository>,
+        github_repository: Arc<dyn GitHubRepository>,
+        activity_repository: Arc<dyn ActivityRepository>,
+    ) -> Self {
+        Self {
+            settings_repository,
+            github_api_repository,
+            github_repository,
+            activity_repository,
+        }
+    }
+
+    pub async fn execute(&self) -> Result<()> {
+        let github_accounts = self.settings_repository.load_githubs().await?;
+
+        for account in github_accounts {
+            let events: Vec<GitHubEvent> = self
+                .github_api_repository
+                .get_events(
+                    account.username.clone(),
+                    account.personal_access_token.clone(),
+                )
+                .await?;
+
+            for event in events {
+                let is_saved = self.github_repository.save_event(event.clone()).await?;
+
+                if is_saved {
+                    let activity = event.to_activity();
+                    let _ = self.activity_repository.save(activity).await;
+                }
+            }
+        }
+        Ok(())
+    }
+}
