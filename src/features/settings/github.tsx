@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import RText from '@/components/display/text';
 import RAddIcon from '@/components/icons/add';
 import RRemoveIcon from '@/components/icons/remove';
@@ -7,6 +6,7 @@ import RTextField from '@/components/input/text-field';
 import { RColumn } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
 import useSettings from '@/hooks/settings';
+import { useState } from 'react';
 
 export default function SettingsGithub() {
   const [personalAccessToken, setPersonalAccessToken] = useState('');
@@ -21,7 +21,12 @@ export default function SettingsGithub() {
     <RGrid columns={['240px', '1fr']} alignItems='start'>
       <RText>Personal Access Token</RText>
       <RColumn gap={1}>
-        <RGrid columns={['1fr', '40px']} rowGap={4} alignItems='center'>
+        <RGrid
+          columns={['1fr', '40px']}
+          rowGap={4}
+          columnGap={2}
+          alignItems='center'
+        >
           <RTextField
             value={personalAccessToken}
             onChange={setPersonalAccessToken}
@@ -35,6 +40,7 @@ export default function SettingsGithub() {
             key={github.id}
             columns={['1fr', '40px']}
             rowGap={4}
+            columnGap={2}
             alignItems='center'
           >
             <RTextField
