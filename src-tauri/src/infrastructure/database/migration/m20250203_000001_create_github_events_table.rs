@@ -10,7 +10,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(GitHubEvents::Table)
+                    .table(Alias::new("github_events"))
                     .if_not_exists()
                     .col(
                         ColumnDef::new(GitHubEvents::Id)
@@ -57,7 +57,7 @@ impl MigrationTrait for Migration {
             .create_index(
                 Index::create()
                     .name("idx_github_events_event_type")
-                    .table(GitHubEvents::Table)
+                    .table(Alias::new("github_events"))
                     .col(GitHubEvents::EventType)
                     .to_owned(),
             )
@@ -67,7 +67,7 @@ impl MigrationTrait for Migration {
             .create_index(
                 Index::create()
                     .name("idx_github_events_created_at")
-                    .table(GitHubEvents::Table)
+                    .table(Alias::new("github_events"))
                     .col(GitHubEvents::CreatedAt)
                     .to_owned(),
             )
@@ -77,7 +77,7 @@ impl MigrationTrait for Migration {
             .create_index(
                 Index::create()
                     .name("idx_github_events_actor_id")
-                    .table(GitHubEvents::Table)
+                    .table(Alias::new("github_events"))
                     .col(GitHubEvents::ActorId)
                     .to_owned(),
             )
@@ -88,12 +88,13 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(GitHubEvents::Table).to_owned())
+            .drop_table(Table::drop().table(Alias::new("github_events")).to_owned())
             .await
     }
 }
 
 #[derive(Iden)]
+#[allow(dead_code)]
 enum GitHubEvents {
     Table,
     Id,
