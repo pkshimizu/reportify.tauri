@@ -60,7 +60,7 @@ impl GitHubEvent {
                 let summary = if commits_count == 1 {
                     "Pushed commit".to_string()
                 } else {
-                    format!("Pushed {} commits", commits_count)
+                    format!("Pushed {commits_count} commits")
                 };
                 let detail = self.payload["commits"]
                     .as_array()
@@ -76,7 +76,7 @@ impl GitHubEvent {
                     "repository" => "Created repository".to_string(),
                     "branch" => "Created branch".to_string(),
                     "tag" => "Created tag".to_string(),
-                    _ => format!("Created {}", ref_type),
+                    _ => format!("Created {ref_type}"),
                 };
                 (summary, String::new())
             }
@@ -85,7 +85,7 @@ impl GitHubEvent {
                 let summary = match ref_type {
                     "branch" => "Deleted branch".to_string(),
                     "tag" => "Deleted tag".to_string(),
-                    _ => format!("Deleted {}", ref_type),
+                    _ => format!("Deleted {ref_type}"),
                 };
                 (summary, String::new())
             }
@@ -204,7 +204,7 @@ impl GitHubEvent {
                     .as_array()
                     .and_then(|commits| commits.first())
                     .and_then(|commit| commit["sha"].as_str())
-                    .map(|sha| format!("https://github.com/{}/commit/{}", repo_name, sha))
+                    .map(|sha| format!("https://github.com/{repo_name}/commit/{sha}"))
             }
             "IssuesEvent" | "IssueCommentEvent" => self.payload["issue"]["html_url"]
                 .as_str()
@@ -224,21 +224,19 @@ impl GitHubEvent {
                 let ref_name = self.payload["ref"].as_str().unwrap_or("");
 
                 match ref_type {
-                    "branch" if !ref_name.is_empty() => Some(format!(
-                        "https://github.com/{}/tree/{}",
-                        repo_name, ref_name
-                    )),
+                    "branch" if !ref_name.is_empty() => {
+                        Some(format!("https://github.com/{repo_name}/tree/{ref_name}"))
+                    }
                     "tag" if !ref_name.is_empty() => Some(format!(
-                        "https://github.com/{}/releases/tag/{}",
-                        repo_name, ref_name
+                        "https://github.com/{repo_name}/releases/tag/{ref_name}"
                     )),
-                    _ => Some(format!("https://github.com/{}", repo_name)),
+                    _ => Some(format!("https://github.com/{repo_name}")),
                 }
             }
             "ForkEvent" => self.payload["forkee"]["html_url"]
                 .as_str()
                 .map(|url| url.to_string()),
-            _ => Some(format!("https://github.com/{}", repo_name)),
+            _ => Some(format!("https://github.com/{repo_name}")),
         }
     }
 }

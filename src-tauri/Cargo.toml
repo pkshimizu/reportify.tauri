@@ -30,6 +30,8 @@ sea-orm-migration = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 dirs = "5.0"
 reqwest = { version = "0.12", features = ["json"] }
+log = "0.4"
+env_logger = "0.11"
 
 # Additional linting and formatting tools
 [dev-dependencies]

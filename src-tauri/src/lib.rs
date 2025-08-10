@@ -22,6 +22,7 @@ use presentation::commands::{
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    env_logger::init();
     tokio::runtime::Runtime::new()
         .unwrap()
         .block_on(async { run_async().await });
@@ -37,7 +38,7 @@ async fn run_async() {
 
     let database_path = app_data_path.join("reportify.db");
     let database_url = format!("sqlite://{}?mode=rwc", database_path.display());
-    println!("Database URL: {database_url}");
+    log::info!("Database URL: {database_url}");
 
     let db_connection = DatabaseConnection::new(&database_url)
         .await
