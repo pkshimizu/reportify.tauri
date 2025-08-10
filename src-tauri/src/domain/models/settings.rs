@@ -17,7 +17,9 @@ impl Settings {
 pub struct SettingsGithub {
     pub id: i32,
     pub username: String,
+    #[allow(unused)]
     pub github_id: i32,
+    #[allow(unused)]
     pub avatar_url: Option<String>,
     pub personal_access_token: String,
     pub created_at: DateTime<Utc>,
