@@ -33,6 +33,17 @@ reqwest = { version = "0.12", features = ["json"] }
 log = "0.4"
 env_logger = "0.11"
 
+# Profile configurations
+[profile.dev]
+debug = true
+opt-level = 0
+overflow-checks = true
+
+[profile.release]
+debug = false
+opt-level = 3
+lto = true
+
 # Additional linting and formatting tools
 [dev-dependencies]
 
