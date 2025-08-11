@@ -2,11 +2,6 @@ import { RSquareBox } from '@/components/display/box';
 import RText from '@/components/display/text';
 import RIconButton from '@/components/input/icon-button';
 import {
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-} from '@mui/icons-material';
-import { useState } from 'react';
-import {
   RCenter,
   RColumn,
   RRow,
@@ -14,6 +9,13 @@ import {
 } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
 import RLink from '@/components/navigation/link';
+import { Activity } from '@/models/activity';
+import {
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+} from '@mui/icons-material';
+import dayjs from 'dayjs';
+import { useMemo } from 'react';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthNames = [
@@ -31,31 +33,50 @@ const monthNames = [
   'December',
 ];
 
-export default function ActivityCalendar() {
-  const [currentMonth, setCurrentMonth] = useState(() => {
-    const date = new Date();
-    date.setDate(1);
-    return date;
-  });
+interface Props {
+  date: Date;
+  activities: Activity[];
+  onChangeDate: (date: Date) => void;
+}
+
+export default function ActivityCalendar({
+  date,
+  activities,
+  onChangeDate,
+}: Props) {
+  const activityCountByDate = useMemo(() => {
+    return activities.reduce(
+      (acc, activity) => {
+        const date = dayjs(activity.createdAt).format('YYYY-MM-DD');
+        if (acc[date]) {
+          acc[date]++;
+        } else {
+          acc[date] = 1;
+        }
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+  }, [activities]);
 
   // Navigate to previous month
   const goToPreviousMonth = () => {
-    const newMonth = new Date(currentMonth);
+    const newMonth = new Date(date);
     newMonth.setMonth(newMonth.getMonth() - 1);
-    setCurrentMonth(newMonth);
+    onChangeDate(newMonth);
   };
 
   // Navigate to next month
   const goToNextMonth = () => {
-    const newMonth = new Date(currentMonth);
+    const newMonth = new Date(date);
     newMonth.setMonth(newMonth.getMonth() + 1);
-    setCurrentMonth(newMonth);
+    onChangeDate(newMonth);
   };
 
   // Generate calendar days
   const generateCalendarDays = () => {
-    const year = currentMonth.getFullYear();
-    const month = currentMonth.getMonth();
+    const year = date.getFullYear();
+    const month = date.getMonth();
 
     // First day of the month
     const firstDay = new Date(year, month, 1);
@@ -83,8 +104,8 @@ export default function ActivityCalendar() {
 
   const isCurrentMonth = (date: Date) => {
     return (
-      date.getMonth() === currentMonth.getMonth() &&
-      date.getFullYear() === currentMonth.getFullYear()
+      date.getMonth() === date.getMonth() &&
+      date.getFullYear() === date.getFullYear()
     );
   };
 
@@ -112,8 +133,8 @@ export default function ActivityCalendar() {
         </RIconButton>
 
         <RRow gap={1}>
-          <RText>{monthNames[currentMonth.getMonth()]}</RText>
-          <RText>{currentMonth.getFullYear()}</RText>
+          <RText>{monthNames[date.getMonth()]}</RText>
+          <RText>{date.getFullYear()}</RText>
         </RRow>
 
         <RIconButton onClick={goToNextMonth}>
@@ -139,12 +160,20 @@ export default function ActivityCalendar() {
         gap={0.5}
       >
         {calendarDays.map((date, index) => {
+          const dateString = dayjs(date).format('YYYY-MM-DD');
           return (
-            <RLink href={`/dates/${date.toISOString()}`} key={index}>
+            <RLink href={`/dates/${dateString}`} key={index}>
               <RSquareBox size={80} align='center' justify='center'>
-                <RText align='center' color={getDayColor(date)}>
-                  {date.getDate()}
-                </RText>
+                <RColumn gap={0.5}>
+                  <RText align='center' color={getDayColor(date)}>
+                    {date.getDate()}
+                  </RText>
+                  {activityCountByDate[dateString] && (
+                    <RText align='center'>
+                      ({activityCountByDate[dateString]})
+                    </RText>
+                  )}
+                </RColumn>
               </RSquareBox>
             </RLink>
           );
