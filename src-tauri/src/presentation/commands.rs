@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use tauri::State;
 
+use crate::application::usecases::activities::LoadActivitiesUseCase;
 use crate::application::usecases::fetcher::FetchGitHubEventsUseCase;
 use crate::application::usecases::settings::{
     CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
@@ -99,4 +100,31 @@ pub async fn fetch_github_events(
         .execute()
         .await
         .map_err(|e| format!("Failed to fetch GitHub events: {e}"))
+}
+
+#[tauri::command]
+pub async fn load_activities(
+    year: i32,
+    month: u32,
+    load_activities_usecase: State<'_, Arc<LoadActivitiesUseCase>>,
+) -> Result<serde_json::Value, String> {
+    match load_activities_usecase.execute(year, month).await {
+        Ok(activities) => {
+            let json_activities: Vec<serde_json::Value> = activities
+                .into_iter()
+                .map(|activity| {
+                    serde_json::json!({
+                        "service": activity.service,
+                        "activityType": activity.activity_type,
+                        "summary": activity.summary,
+                        "detail": activity.detail,
+                        "originalUrl": activity.original_url,
+                        "createdAt": activity.created_at.to_rfc3339()
+                    })
+                })
+                .collect();
+            Ok(serde_json::json!(json_activities))
+        }
+        Err(e) => Err(format!("Failed to load activities: {e}")),
+    }
 }
