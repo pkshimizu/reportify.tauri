@@ -18,14 +18,13 @@ function Calendar() {
   const { loadActivities } = useActivities();
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  const fetchActivities = async (year: number, month: number) => {
-    const activities = await loadActivities(year, month);
-    setActivities(activities);
-  };
-
   useEffect(() => {
+    const fetchActivities = async (year: number, month: number) => {
+      const activities = await loadActivities(year, month);
+      setActivities(activities);
+    };
     fetchActivities(date.getFullYear(), date.getMonth() + 1);
-  }, [date]);
+  }, [date, loadActivities]);
 
   return (
     <RCenter>
