@@ -1,11 +1,19 @@
 import { Activity } from '@/models/activity';
 import { invoke } from '@tauri-apps/api/core';
 import { useCallback } from 'react';
+import { useActivitiesState } from './activities-state';
 
 export default function useActivities() {
+  const { fetching, setFetching } = useActivitiesState();
+
   const fetchGitHubEvents = useCallback(async () => {
-    await invoke('fetch_github_events');
-  }, []);
+    setFetching(true);
+    try {
+      await invoke('fetch_github_events');
+    } finally {
+      setFetching(false);
+    }
+  }, [setFetching]);
 
   const loadActivities = useCallback(async (year: number, month: number) => {
     const activities = await invoke('load_activities', { year, month });
@@ -13,6 +21,7 @@ export default function useActivities() {
   }, []);
 
   return {
+    fetching,
     fetchGitHubEvents,
     loadActivities,
   };

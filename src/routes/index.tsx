@@ -10,7 +10,7 @@ export const Route = createFileRoute('/')({
 });
 
 function Index() {
-  const { fetchGitHubEvents } = useActivities();
+  const { fetchGitHubEvents, fetching } = useActivities();
 
   const handleFetchGithubEvents = () => {
     fetchGitHubEvents();
@@ -21,7 +21,7 @@ function Index() {
       <RColumn gap={2}>
         <RText>Welcome reportify</RText>
         <RRow justify='center'>
-          <RIconButton onClick={handleFetchGithubEvents}>
+          <RIconButton loading={fetching} onClick={handleFetchGithubEvents}>
             <RSyncIcon />
           </RIconButton>
         </RRow>
