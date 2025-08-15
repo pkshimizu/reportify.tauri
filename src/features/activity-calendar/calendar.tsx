@@ -15,7 +15,8 @@ import {
   ChevronRight as ChevronRightIcon,
 } from '@mui/icons-material';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
+import { useCallback } from 'react';
+import ActivityCounts from './counts';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthNames = [
@@ -44,20 +45,14 @@ export default function ActivityCalendar({
   activities,
   onChangeDate,
 }: Props) {
-  const activityCountByDate = useMemo(() => {
-    return activities.reduce(
-      (acc, activity) => {
-        const date = dayjs(activity.createdAt).format('YYYY-MM-DD');
-        if (acc[date]) {
-          acc[date]++;
-        } else {
-          acc[date] = 1;
-        }
-        return acc;
-      },
-      {} as Record<string, number>
-    );
-  }, [activities]);
+  const findActivitiesByDate = useCallback(
+    (date: Date) => {
+      return activities.filter(activity => {
+        return dayjs(activity.createdAt).isSame(date, 'day');
+      });
+    },
+    [activities]
+  );
 
   // Navigate to previous month
   const goToPreviousMonth = () => {
@@ -116,7 +111,6 @@ export default function ActivityCalendar({
   };
 
   const getDayColor = (date: Date) => {
-    console.log(date, isCurrentMonth(date));
     if (!isCurrentMonth(date)) return 'outside';
     const day = date.getDay();
     if (day === 0) return 'sun';
@@ -165,15 +159,11 @@ export default function ActivityCalendar({
           return (
             <RLink href={`/dates/${dateString}`} key={index}>
               <RSquareBox size={80} align='center' justify='center'>
-                <RColumn gap={0.5}>
+                <RColumn gap={1}>
                   <RText align='center' color={getDayColor(date)}>
                     {date.getDate()}
                   </RText>
-                  {activityCountByDate[dateString] && (
-                    <RText align='center'>
-                      ({activityCountByDate[dateString]})
-                    </RText>
-                  )}
+                  <ActivityCounts activities={findActivitiesByDate(date)} />
                 </RColumn>
               </RSquareBox>
             </RLink>

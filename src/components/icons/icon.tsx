@@ -4,6 +4,7 @@ import { MainColor, iconColor } from '@/models/color';
 
 export interface IconProps {
   color?: MainColor;
+  size?: 'small' | 'medium' | 'large';
 }
 
 interface Props extends IconProps {
@@ -11,5 +12,11 @@ interface Props extends IconProps {
 }
 
 export default function RIcon(props: Props) {
-  return <SvgIcon component={props.icon} color={iconColor(props.color)} />;
+  return (
+    <SvgIcon
+      component={props.icon}
+      color={iconColor(props.color)}
+      fontSize={props.size}
+    />
+  );
 }
