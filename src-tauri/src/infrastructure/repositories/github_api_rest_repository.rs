@@ -80,47 +80,67 @@ impl GithubApiRepository for GithubApiRestRepository {
         &self,
         username: String,
         personal_access_token: String,
+        latest_event_id: Option<String>,
     ) -> Result<Vec<GitHubEvent>> {
-        let url = format!("https://api.github.com/users/{username}/events");
-        let response = self
-            .client
-            .get(&url)
-            .header("Authorization", format!("token {personal_access_token}"))
-            .header("User-Agent", "reportify")
-            .send()
-            .await?;
+        let mut page = 4;
+        let mut results = Vec::new();
+        loop {
+            let url =
+                format!("https://api.github.com/users/{username}/events?per_page=100&page={page}");
+            log::info!("Fetching GitHub events from {}", url);
+            let response = self
+                .client
+                .get(&url)
+                .header("Authorization", format!("token {personal_access_token}"))
+                .header("User-Agent", "reportify")
+                .send()
+                .await?;
+            log::info!("Response status: {:?}", response.status());
+            log::info!("Response headers: {:?}", response.headers());
 
-        if !response.status().is_success() {
-            return Err(anyhow::anyhow!(
-                "GitHub API request failed with status: {}",
-                response.status()
-            ));
+            if !response.status().is_success() {
+                return Err(anyhow::anyhow!(
+                    "GitHub API request failed with status: {}",
+                    response.status()
+                ));
+            }
+
+            let github_events: Vec<GitHubApiEvent> = response.json().await?;
+
+            let events: Vec<GitHubEvent> = github_events
+                .into_iter()
+                .map(|event| GitHubEvent {
+                    id: event.id,
+                    event_type: event.event_type,
+                    actor: GitHubEventActor {
+                        id: event.actor.id,
+                        login: event.actor.login,
+                        avatar_url: event.actor.avatar_url,
+                    },
+                    repo: GitHubEventRepo {
+                        id: event.repo.id,
+                        name: event.repo.name,
+                    },
+                    payload: event.payload,
+                    public: event.public,
+                    created_at: chrono::DateTime::parse_from_rfc3339(&event.created_at)
+                        .map(|dt| dt.with_timezone(&chrono::Utc))
+                        .unwrap_or_else(|_| chrono::Utc::now()),
+                })
+                .collect();
+            if events.is_empty() {
+                break;
+            }
+            results.extend(events.clone());
+            if latest_event_id.is_some() {
+                let unwrapped_latest_event_id = latest_event_id.clone().unwrap();
+                if events.iter().any(|e| e.id == unwrapped_latest_event_id) {
+                    break;
+                }
+            }
+            page += 1;
         }
 
-        let github_events: Vec<GitHubApiEvent> = response.json().await?;
-
-        let events = github_events
-            .into_iter()
-            .map(|event| GitHubEvent {
-                id: event.id,
-                event_type: event.event_type,
-                actor: GitHubEventActor {
-                    id: event.actor.id,
-                    login: event.actor.login,
-                    avatar_url: event.actor.avatar_url,
-                },
-                repo: GitHubEventRepo {
-                    id: event.repo.id,
-                    name: event.repo.name,
-                },
-                payload: event.payload,
-                public: event.public,
-                created_at: chrono::DateTime::parse_from_rfc3339(&event.created_at)
-                    .map(|dt| dt.with_timezone(&chrono::Utc))
-                    .unwrap_or_else(|_| chrono::Utc::now()),
-            })
-            .collect();
-
-        Ok(events)
+        Ok(results)
     }
 }

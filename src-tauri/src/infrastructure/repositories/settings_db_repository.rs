@@ -69,6 +69,7 @@ impl SettingsRepository for SettingsDbRepository {
                     record.github_id,
                     record.avatar_url,
                     record.personal_access_token,
+                    record.latest_event_id,
                     record.created_at,
                     record.updated_at,
                 )
@@ -90,6 +91,7 @@ impl SettingsRepository for SettingsDbRepository {
             github_id: Set(user.id),
             avatar_url: Set(user.avatar_url),
             personal_access_token: Set(personal_access_token),
+            latest_event_id: Set(None),
             created_at: Set(now),
             updated_at: Set(now),
         };
@@ -102,6 +104,7 @@ impl SettingsRepository for SettingsDbRepository {
             result.github_id,
             result.avatar_url,
             result.personal_access_token,
+            result.latest_event_id,
             result.created_at,
             result.updated_at,
         ))

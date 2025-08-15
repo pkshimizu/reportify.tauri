@@ -9,5 +9,6 @@ pub trait GithubApiRepository: Send + Sync {
         &self,
         username: String,
         personal_access_token: String,
+        latest_event_id: Option<String>,
     ) -> Result<Vec<GitHubEvent>>;
 }

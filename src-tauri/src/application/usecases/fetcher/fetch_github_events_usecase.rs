@@ -38,6 +38,7 @@ impl FetchGitHubEventsUseCase {
                 .get_events(
                     account.username.clone(),
                     account.personal_access_token.clone(),
+                    account.latest_event_id.clone(),
                 )
                 .await?;
 

@@ -10,6 +10,7 @@ pub struct Model {
     pub github_id: i32,
     pub personal_access_token: String,
     pub avatar_url: Option<String>,
+    pub latest_event_id: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
