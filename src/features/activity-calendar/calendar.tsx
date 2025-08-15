@@ -102,10 +102,10 @@ export default function ActivityCalendar({
     return days;
   };
 
-  const isCurrentMonth = (date: Date) => {
+  const isCurrentMonth = (targetDate: Date) => {
     return (
-      date.getMonth() === date.getMonth() &&
-      date.getFullYear() === date.getFullYear()
+      targetDate.getMonth() === date.getMonth() &&
+      targetDate.getFullYear() === date.getFullYear()
     );
   };
 
@@ -116,6 +116,7 @@ export default function ActivityCalendar({
   };
 
   const getDayColor = (date: Date) => {
+    console.log(date, isCurrentMonth(date));
     if (!isCurrentMonth(date)) return 'outside';
     const day = date.getDay();
     if (day === 0) return 'sun';
