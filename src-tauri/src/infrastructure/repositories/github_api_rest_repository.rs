@@ -1,9 +1,10 @@
 use anyhow::Result;
-use reqwest;
 use serde::Deserialize;
+use std::collections::HashMap;
 
 use crate::domain::models::github::{GitHubEvent, GitHubEventActor, GitHubEventRepo, GitHubUser};
 use crate::domain::repositories::GithubApiRepository;
+use crate::infrastructure::clients::GitHubRestApiClient;
 
 #[derive(Deserialize)]
 struct GitHubApiUser {
@@ -38,13 +39,13 @@ struct GitHubApiEventRepo {
 }
 
 pub struct GithubApiRestRepository {
-    client: reqwest::Client,
+    client: GitHubRestApiClient,
 }
 
 impl GithubApiRestRepository {
     pub fn new() -> Self {
         Self {
-            client: reqwest::Client::new(),
+            client: GitHubRestApiClient::new(),
         }
     }
 }
@@ -52,13 +53,13 @@ impl GithubApiRestRepository {
 #[async_trait::async_trait]
 impl GithubApiRepository for GithubApiRestRepository {
     async fn get_user(&self, personal_access_token: String) -> Result<GitHubUser> {
-        let response = self
-            .client
-            .get("https://api.github.com/user")
-            .header("Authorization", format!("token {personal_access_token}"))
-            .header("User-Agent", "reportify")
-            .send()
-            .await?;
+        let mut headers = HashMap::new();
+        headers.insert(
+            "Authorization".to_string(),
+            format!("token {}", personal_access_token),
+        );
+
+        let response = self.client.get("/user", Some(headers)).await?;
 
         if !response.status().is_success() {
             return Err(anyhow::anyhow!(
@@ -82,27 +83,28 @@ impl GithubApiRepository for GithubApiRestRepository {
         personal_access_token: String,
         latest_event_id: Option<String>,
     ) -> Result<Vec<GitHubEvent>> {
-        let mut page = 4;
+        let mut page = 1;
         let mut results = Vec::new();
         loop {
-            let url =
-                format!("https://api.github.com/users/{username}/events?per_page=100&page={page}");
-            log::info!("Fetching GitHub events from {}", url);
-            let response = self
-                .client
-                .get(&url)
-                .header("Authorization", format!("token {personal_access_token}"))
-                .header("User-Agent", "reportify")
-                .send()
-                .await?;
+            let path = format!("/users/{}/events?per_page=100&page={}", username, page);
+            log::info!("Fetching GitHub events from {}", path);
+
+            let mut headers = HashMap::new();
+            headers.insert(
+                "Authorization".to_string(),
+                format!("token {}", personal_access_token),
+            );
+
+            let response = self.client.get(&path, Some(headers)).await?;
             log::info!("Response status: {:?}", response.status());
             log::info!("Response headers: {:?}", response.headers());
 
             if !response.status().is_success() {
-                return Err(anyhow::anyhow!(
-                    "GitHub API request failed with status: {}",
-                    response.status()
-                ));
+                break;
+                // return Err(anyhow::anyhow!(
+                //     "GitHub API request failed with status: {}",
+                //     response.status()
+                // ));
             }
 
             let github_events: Vec<GitHubApiEvent> = response.json().await?;
