@@ -87,7 +87,6 @@ impl GithubApiRepository for GithubApiRestRepository {
         let mut results = Vec::new();
         loop {
             let path = format!("/users/{}/events?per_page=100&page={}", username, page);
-            log::info!("Fetching GitHub events from {}", path);
 
             let mut headers = HashMap::new();
             headers.insert(
@@ -96,8 +95,6 @@ impl GithubApiRepository for GithubApiRestRepository {
             );
 
             let response = self.client.get(&path, Some(headers)).await?;
-            log::info!("Response status: {:?}", response.status());
-            log::info!("Response headers: {:?}", response.headers());
 
             if !response.status().is_success() {
                 break;
