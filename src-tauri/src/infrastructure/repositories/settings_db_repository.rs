@@ -123,7 +123,11 @@ impl SettingsRepository for SettingsDbRepository {
         Ok(())
     }
 
-    async fn save_github_latest_event_id(&self, setting_github_id: i32, github_event_id: i64) -> Result<()> {
+    async fn save_github_latest_event_id(
+        &self,
+        setting_github_id: i32,
+        github_event_id: String,
+    ) -> Result<()> {
         let github_setting = SettingsGithubEntity::find_by_id(setting_github_id)
             .one(&self.db_connection)
             .await?

@@ -16,5 +16,9 @@ pub trait SettingsRepository: Send + Sync {
         personal_access_token: String,
     ) -> Result<SettingsGithub>;
     async fn delete_github(&self, id: i32) -> Result<()>;
-    async fn save_github_latest_event_id(&self, setting_github_id: i32, github_event_id: i64) -> Result<()>;
+    async fn save_github_latest_event_id(
+        &self,
+        setting_github_id: i32,
+        github_event_id: String,
+    ) -> Result<()>;
 }

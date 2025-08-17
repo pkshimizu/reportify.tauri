@@ -42,13 +42,28 @@ impl FetchGitHubEventsUseCase {
                 )
                 .await?;
 
-            for event in events {
+            let mut latest_event: Option<&GitHubEvent> = None;
+
+            for event in &events {
                 let is_saved = self.github_repository.save_event(event.clone()).await?;
 
                 if is_saved {
                     let activity = event.to_activity();
                     let _ = self.activity_repository.save(activity).await;
                 }
+
+                // Track the latest event by created_at timestamp
+                if latest_event.is_none() || event.created_at > latest_event.unwrap().created_at {
+                    latest_event = Some(event);
+                }
+            }
+
+            // Save the latest event ID if any events were processed
+            if let Some(event) = latest_event {
+                let _ = self
+                    .settings_repository
+                    .save_github_latest_event_id(account.id, event.id.clone())
+                    .await;
             }
         }
         Ok(())
