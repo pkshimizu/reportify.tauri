@@ -122,4 +122,19 @@ impl SettingsRepository for SettingsDbRepository {
 
         Ok(())
     }
+
+    async fn save_github_latest_event_id(&self, setting_github_id: i32, github_event_id: i64) -> Result<()> {
+        let github_setting = SettingsGithubEntity::find_by_id(setting_github_id)
+            .one(&self.db_connection)
+            .await?
+            .ok_or_else(|| anyhow::anyhow!("GitHub setting not found"))?;
+
+        let mut active_model: settings_github::ActiveModel = github_setting.into();
+        active_model.latest_event_id = Set(Some(github_event_id));
+        active_model.updated_at = Set(Utc::now());
+
+        active_model.update(&self.db_connection).await?;
+
+        Ok(())
+    }
 }
