@@ -133,8 +133,7 @@ impl GithubApiRepository for GithubApiRestRepository {
                 break;
             }
             results.extend(events.clone());
-            if latest_event_id.is_some() {
-                let unwrapped_latest_event_id = latest_event_id.clone().unwrap();
+            if let Some(unwrapped_latest_event_id) = latest_event_id.clone() {
                 if events.iter().any(|e| e.id == unwrapped_latest_event_id) {
                     break;
                 }
