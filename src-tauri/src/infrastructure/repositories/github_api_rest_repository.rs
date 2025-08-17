@@ -97,11 +97,13 @@ impl GithubApiRepository for GithubApiRestRepository {
             let response = self.client.get(&path, Some(headers)).await?;
 
             if !response.status().is_success() {
-                break;
-                // return Err(anyhow::anyhow!(
-                //     "GitHub API request failed with status: {}",
-                //     response.status()
-                // ));
+                if response.status().as_u16() == 422 {
+                    break;
+                }
+                return Err(anyhow::anyhow!(
+                    "GitHub API request failed with status: {}",
+                    response.status()
+                ));
             }
 
             let github_events: Vec<GitHubApiEvent> = response.json().await?;

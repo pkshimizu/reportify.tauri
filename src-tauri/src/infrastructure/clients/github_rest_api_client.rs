@@ -86,6 +86,7 @@ impl GitHubRestApiClient {
         } else {
             format!("{}{}", self.base_url, path)
         };
+        log::info!("Requesting {}", url);
 
         let mut request = self.client.request(method, &url);
 
@@ -107,6 +108,8 @@ impl GitHubRestApiClient {
         }
 
         let response = request.send().await?;
+        log::info!("Response status: {:?}", response.status());
+        log::info!("Response headers: {:?}", response.headers());
         Ok(response)
     }
 }
