@@ -18,8 +18,8 @@ use infrastructure::{
     },
 };
 use presentation::commands::{
-    create_github, delete_github, fetch_github_events, load_activities, load_githubs,
-    load_settings, save_theme,
+    create_github, delete_github, fetch_github_events, fetch_github_events_with_range,
+    load_activities, load_githubs, load_settings, save_theme,
 };
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -91,6 +91,7 @@ async fn run_async() {
             create_github,
             delete_github,
             fetch_github_events,
+            fetch_github_events_with_range,
             load_activities,
         ])
         .run(tauri::generate_context!())

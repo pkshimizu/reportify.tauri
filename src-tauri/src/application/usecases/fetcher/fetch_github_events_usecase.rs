@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use anyhow::Result;
+use chrono::{DateTime, Utc};
 
 use crate::domain::models::github::GitHubEvent;
 use crate::domain::repositories::{
@@ -66,6 +67,16 @@ impl FetchGitHubEventsUseCase {
                     .await;
             }
         }
+        Ok(())
+    }
+
+    pub async fn execute_with_range(&self, start_date: DateTime<Utc>, end_date: DateTime<Utc>) -> Result<()> {
+        let github_accounts = self.settings_repository.load_githubs().await?;
+
+        for account in github_accounts {
+            self.github_api_repository.get_events_collection(account.username.clone(), account.personal_access_token.clone(), start_date, end_date).await?;
+        }
+
         Ok(())
     }
 }

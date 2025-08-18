@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use chrono::{DateTime, Utc};
 use tauri::State;
 
 use crate::application::usecases::activities::LoadActivitiesUseCase;
@@ -100,6 +101,26 @@ pub async fn fetch_github_events(
         .execute()
         .await
         .map_err(|e| format!("Failed to fetch GitHub events: {e}"))
+}
+
+#[tauri::command]
+pub async fn fetch_github_events_with_range(
+    start_date: String,
+    end_date: String,
+    fetch_github_events_usecase: State<'_, Arc<FetchGitHubEventsUseCase>>,
+) -> Result<(), String> {
+    let start_datetime = DateTime::parse_from_rfc3339(&start_date)
+        .map_err(|e| format!("Invalid start date format: {e}"))?
+        .with_timezone(&Utc);
+    
+    let end_datetime = DateTime::parse_from_rfc3339(&end_date)
+        .map_err(|e| format!("Invalid end date format: {e}"))?
+        .with_timezone(&Utc);
+
+    fetch_github_events_usecase
+        .execute_with_range(start_datetime, end_datetime)
+        .await
+        .map_err(|e| format!("Failed to fetch GitHub events with range: {e}"))
 }
 
 #[tauri::command]
