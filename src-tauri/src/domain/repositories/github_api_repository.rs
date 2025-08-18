@@ -1,6 +1,7 @@
 use anyhow::Result;
+use chrono::{DateTime, Utc};
 
-use crate::domain::models::github::{GitHubEvent, GitHubUser};
+use crate::domain::models::github::{GitHubEventsCollection, GitHubEvent, GitHubUser};
 
 #[async_trait::async_trait]
 pub trait GithubApiRepository: Send + Sync {
@@ -11,4 +12,12 @@ pub trait GithubApiRepository: Send + Sync {
         personal_access_token: String,
         latest_event_id: Option<String>,
     ) -> Result<Vec<GitHubEvent>>;
+    #[allow(dead_code)]
+    async fn get_events_collection(
+        &self,
+        username: String,
+        personal_access_token: String,
+        start_date: DateTime<Utc>,
+        end_date: DateTime<Utc>,
+    ) -> Result<GitHubEventsCollection>;
 }

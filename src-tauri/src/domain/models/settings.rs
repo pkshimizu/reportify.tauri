@@ -28,6 +28,7 @@ pub struct SettingsGithub {
 }
 
 impl SettingsGithub {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         id: i32,
         username: String,

@@ -240,3 +240,45 @@ impl GitHubEvent {
         }
     }
 }
+
+#[allow(dead_code)]
+pub struct GitHubCommit {
+    pub id: String,
+    pub message: String,
+    pub url: String,
+    pub created_at: DateTime<Utc>,
+}
+
+#[allow(dead_code)]
+pub struct GitHubIssue {
+    pub id: String,
+    pub title: String,
+    pub body: String,
+    pub url: String,
+    pub created_at: DateTime<Utc>,
+}
+
+#[allow(dead_code)]
+pub struct GitHubPullRequest {
+    pub id: String,
+    pub title: String,
+    pub body: String,
+    pub url: String,
+    pub created_at: DateTime<Utc>,
+}
+
+#[allow(dead_code)]
+pub struct GitHubPullRequestReview {
+    pub id: String,
+    pub body: String,
+    pub url: String,
+    pub created_at: DateTime<Utc>,
+}
+
+#[allow(dead_code)]
+pub struct GitHubEventsCollection {
+    pub commits: Vec<GitHubCommit>,
+    pub issues: Vec<GitHubIssue>,
+    pub pull_requests: Vec<GitHubPullRequest>,
+    pub pull_request_reviews: Vec<GitHubPullRequestReview>,
+}
