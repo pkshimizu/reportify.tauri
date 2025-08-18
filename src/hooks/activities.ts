@@ -15,6 +15,18 @@ export default function useActivities() {
     }
   }, [setFetching]);
 
+  const fetchGitHubEventsWithRange = useCallback(
+    async (startDate: string, endDate: string) => {
+      setFetching(true);
+      try {
+        await invoke('fetch_github_events_with_range', { startDate, endDate });
+      } finally {
+        setFetching(false);
+      }
+    },
+    [setFetching]
+  );
+
   const loadActivities = useCallback(async (year: number, month: number) => {
     const activities = await invoke('load_activities', { year, month });
     return activities as Activity[];
@@ -23,6 +35,7 @@ export default function useActivities() {
   return {
     fetching,
     fetchGitHubEvents,
+    fetchGitHubEventsWithRange,
     loadActivities,
   };
 }

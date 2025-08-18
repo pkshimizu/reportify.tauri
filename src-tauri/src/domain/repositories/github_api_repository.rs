@@ -1,7 +1,7 @@
 use anyhow::Result;
 use chrono::{DateTime, Utc};
 
-use crate::domain::models::github::{GitHubEventsCollection, GitHubEvent, GitHubUser};
+use crate::domain::models::github::{GitHubEvent, GitHubEventsCollection, GitHubUser};
 
 #[async_trait::async_trait]
 pub trait GithubApiRepository: Send + Sync {

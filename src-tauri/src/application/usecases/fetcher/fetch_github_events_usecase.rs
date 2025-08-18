@@ -70,11 +70,22 @@ impl FetchGitHubEventsUseCase {
         Ok(())
     }
 
-    pub async fn execute_with_range(&self, start_date: DateTime<Utc>, end_date: DateTime<Utc>) -> Result<()> {
+    pub async fn execute_with_range(
+        &self,
+        start_date: DateTime<Utc>,
+        end_date: DateTime<Utc>,
+    ) -> Result<()> {
         let github_accounts = self.settings_repository.load_githubs().await?;
 
         for account in github_accounts {
-            self.github_api_repository.get_events_collection(account.username.clone(), account.personal_access_token.clone(), start_date, end_date).await?;
+            self.github_api_repository
+                .get_events_collection(
+                    account.username.clone(),
+                    account.personal_access_token.clone(),
+                    start_date,
+                    end_date,
+                )
+                .await?;
         }
 
         Ok(())

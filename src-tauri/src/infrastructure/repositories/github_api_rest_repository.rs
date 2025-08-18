@@ -1,7 +1,7 @@
 use anyhow::Result;
+use chrono::{DateTime, Utc};
 use serde::Deserialize;
 use std::collections::HashMap;
-use chrono::{DateTime, Utc};
 
 use crate::domain::models::github::{
     GitHubCommit, GitHubEvent, GitHubEventActor, GitHubEventRepo, GitHubEventsCollection,
@@ -415,9 +415,10 @@ impl GithubApiRestRepository {
 
         if let Some(branch_ref) = default_branch_ref {
             for commit_node in branch_ref.target.history.nodes {
-                let committed_date = chrono::DateTime::parse_from_rfc3339(&commit_node.committed_date)
-                    .map(|dt| dt.with_timezone(&chrono::Utc))
-                    .unwrap_or_else(|_| chrono::Utc::now());
+                let committed_date =
+                    chrono::DateTime::parse_from_rfc3339(&commit_node.committed_date)
+                        .map(|dt| dt.with_timezone(&chrono::Utc))
+                        .unwrap_or_else(|_| chrono::Utc::now());
 
                 if committed_date >= start_date && committed_date <= end_date {
                     commits.push(GitHubCommit {

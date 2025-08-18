@@ -112,7 +112,7 @@ pub async fn fetch_github_events_with_range(
     let start_datetime = DateTime::parse_from_rfc3339(&start_date)
         .map_err(|e| format!("Invalid start date format: {e}"))?
         .with_timezone(&Utc);
-    
+
     let end_datetime = DateTime::parse_from_rfc3339(&end_date)
         .map_err(|e| format!("Invalid end date format: {e}"))?
         .with_timezone(&Utc);

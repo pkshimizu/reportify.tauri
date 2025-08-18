@@ -1,9 +1,11 @@
-import { RCenter } from '@/components/layout/flex-box';
+import RButton from '@/components/input/button';
+import { RCenter, RColumn } from '@/components/layout/flex-box';
 import ActivityCalendar from '@/features/activity-calendar/calendar';
 import useActivities from '@/hooks/activities';
 import { Activity } from '@/models/activity';
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { useCallback, useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/calendar')({
   component: Calendar,
@@ -15,7 +17,8 @@ function Calendar() {
     date.setDate(1);
     return date;
   });
-  const { loadActivities } = useActivities();
+  const { loadActivities, fetchGitHubEventsWithRange, fetching } =
+    useActivities();
   const [activities, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
@@ -26,13 +29,24 @@ function Calendar() {
     fetchActivities(date.getFullYear(), date.getMonth() + 1);
   }, [date, loadActivities]);
 
+  const handleFetch = useCallback(() => {
+    const startDate = dayjs(date).startOf('month');
+    const endDate = dayjs(date).endOf('month');
+    fetchGitHubEventsWithRange(startDate.toISOString(), endDate.toISOString());
+  }, [date, fetchGitHubEventsWithRange]);
+
   return (
     <RCenter>
-      <ActivityCalendar
-        date={date}
-        activities={activities}
-        onChangeDate={setDate}
-      />
+      <RColumn>
+        <RButton loading={fetching} onClick={handleFetch}>
+          Fetch GitHub Events
+        </RButton>
+        <ActivityCalendar
+          date={date}
+          activities={activities}
+          onChangeDate={setDate}
+        />
+      </RColumn>
     </RCenter>
   );
 }
