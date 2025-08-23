@@ -9,6 +9,7 @@ use crate::domain::models::github::{
 };
 use crate::domain::repositories::GithubApiRepository;
 use crate::infrastructure::clients::GitHubRestApiClient;
+use crate::infrastructure::graphql::{GitHubGraphQLClient, RepositoryData, DefaultBranchRef, CommitTarget, IssueConnection, PullRequestConnection};
 
 #[derive(Deserialize)]
 struct GitHubApiUser {
@@ -42,113 +43,17 @@ struct GitHubApiEventRepo {
     name: String,
 }
 
-#[derive(serde::Serialize)]
-struct GraphQLQuery {
-    query: String,
-    variables: serde_json::Value,
-}
-
-#[derive(Deserialize)]
-struct GraphQLResponse {
-    data: Option<RepositoryData>,
-    errors: Option<Vec<GraphQLError>>,
-}
-
-#[derive(Deserialize)]
-struct GraphQLError {
-    message: String,
-}
-
-#[derive(Deserialize)]
-struct RepositoryData {
-    repository: Option<Repository>,
-}
-
-#[derive(Deserialize)]
-struct Repository {
-    #[serde(rename = "defaultBranchRef")]
-    default_branch_ref: Option<DefaultBranchRef>,
-    issues: Connection<IssueNode>,
-    #[serde(rename = "pullRequests")]
-    pull_requests: Connection<PullRequestNode>,
-}
-
-#[derive(Deserialize)]
-struct DefaultBranchRef {
-    target: Target,
-}
-
-#[derive(Deserialize)]
-struct Target {
-    history: Connection<CommitNode>,
-}
-
-#[derive(Deserialize)]
-#[allow(dead_code)]
-struct Connection<T> {
-    nodes: Vec<T>,
-    #[serde(rename = "pageInfo")]
-    page_info: PageInfo,
-}
-
-#[allow(dead_code)]
-#[derive(Deserialize)]
-struct PageInfo {
-    #[serde(rename = "hasNextPage")]
-    has_next_page: bool,
-    #[serde(rename = "endCursor")]
-    end_cursor: Option<String>,
-}
-
-#[derive(Deserialize)]
-struct CommitNode {
-    oid: String,
-    message: String,
-    #[serde(rename = "committedDate")]
-    committed_date: String,
-    url: String,
-}
-
-#[derive(Deserialize)]
-#[allow(dead_code)]
-struct IssueNode {
-    id: String,
-    title: String,
-    body: Option<String>,
-    url: String,
-    #[serde(rename = "createdAt")]
-    created_at: String,
-    reviews: Option<Connection<ReviewNode>>,
-}
-
-#[derive(Deserialize)]
-struct PullRequestNode {
-    id: String,
-    title: String,
-    body: Option<String>,
-    url: String,
-    #[serde(rename = "createdAt")]
-    created_at: String,
-    reviews: Option<Connection<ReviewNode>>,
-}
-
-#[derive(Deserialize)]
-struct ReviewNode {
-    id: String,
-    body: Option<String>,
-    url: String,
-    #[serde(rename = "createdAt")]
-    created_at: String,
-}
 
 pub struct GithubApiRestRepository {
     client: GitHubRestApiClient,
+    graphql_client: GitHubGraphQLClient,
 }
 
 impl GithubApiRestRepository {
     pub fn new() -> Self {
         Self {
             client: GitHubRestApiClient::new(),
+            graphql_client: GitHubGraphQLClient::new(),
         }
     }
 }
@@ -257,104 +162,18 @@ impl GithubApiRepository for GithubApiRestRepository {
         let repository_name = self.extract_repository_name(username.clone())?;
         let owner = self.extract_owner(username)?;
 
-        let query = r#"
-            query GetRepositoryEvents($owner: String!, $name: String!, $startDate: DateTime!, $endDate: DateTime!, $cursor: String) {
-                repository(owner: $owner, name: $name) {
-                    defaultBranchRef {
-                        target {
-                            ... on Commit {
-                                history(first: 100, since: $startDate, until: $endDate, after: $cursor) {
-                                    nodes {
-                                        oid
-                                        message
-                                        committedDate
-                                        url
-                                    }
-                                    pageInfo {
-                                        hasNextPage
-                                        endCursor
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    issues(first: 100, states: [OPEN, CLOSED], filterBy: {since: $startDate}) {
-                        nodes {
-                            id
-                            title
-                            body
-                            url
-                            createdAt
-                        }
-                        pageInfo {
-                            hasNextPage
-                            endCursor
-                        }
-                    }
-                    pullRequests(first: 100, states: [OPEN, CLOSED, MERGED], orderBy: {field: CREATED_AT, direction: DESC}) {
-                        nodes {
-                            id
-                            title
-                            body
-                            url
-                            createdAt
-                            reviews(first: 50) {
-                                nodes {
-                                    id
-                                    body
-                                    url
-                                    createdAt
-                                }
-                                pageInfo {
-                                    hasNextPage
-                                    endCursor
-                                }
-                            }
-                        }
-                        pageInfo {
-                            hasNextPage
-                            endCursor
-                        }
-                    }
-                }
-            }
-        "#;
-
-        let variables = serde_json::json!({
-            "owner": owner,
-            "name": repository_name,
-            "startDate": start_date.to_rfc3339(),
-            "endDate": end_date.to_rfc3339(),
-            "cursor": null
-        });
-
-        let query_body = GraphQLQuery {
-            query: query.to_string(),
-            variables,
-        };
-
-        let mut headers = HashMap::new();
-        headers.insert(
-            "Authorization".to_string(),
-            format!("Bearer {personal_access_token}"),
-        );
-        headers.insert("Content-Type".to_string(), "application/json".to_string());
-
         let response = self
-            .client
-            .post("/graphql", Some(&query_body), Some(headers))
+            .graphql_client
+            .query_repository_events(
+                owner,
+                repository_name,
+                start_date.to_rfc3339(),
+                end_date.to_rfc3339(),
+                &personal_access_token,
+            )
             .await?;
 
-        if !response.status().is_success() {
-            return Err(anyhow::anyhow!(
-                "GitHub GraphQL API request failed with status: {}",
-                response.status()
-            ));
-        }
-
-        let graphql_response: GraphQLResponse = response.json().await?;
-
-        if let Some(errors) = graphql_response.errors {
+        if let Some(errors) = response.errors {
             let error_messages: Vec<String> = errors.iter().map(|e| e.message.clone()).collect();
             return Err(anyhow::anyhow!(
                 "GraphQL errors: {}",
@@ -362,7 +181,7 @@ impl GithubApiRepository for GithubApiRestRepository {
             ));
         }
 
-        let data = graphql_response
+        let data = response
             .data
             .ok_or_else(|| anyhow::anyhow!("No data in GraphQL response"))?;
 
@@ -370,10 +189,10 @@ impl GithubApiRepository for GithubApiRestRepository {
             .repository
             .ok_or_else(|| anyhow::anyhow!("Repository not found"))?;
 
-        let commits = self.extract_commits(repository.default_branch_ref, start_date, end_date)?;
-        let issues = self.extract_issues(repository.issues, start_date, end_date)?;
+        let commits = self.extract_commits_from_response(repository.default_branch_ref, start_date, end_date)?;
+        let issues = self.extract_issues_from_response(repository.issues, start_date, end_date)?;
         let (pull_requests, pull_request_reviews) =
-            self.extract_pull_requests_and_reviews(repository.pull_requests, start_date, end_date)?;
+            self.extract_pull_requests_and_reviews_from_response(repository.pull_requests, start_date, end_date)?;
 
         Ok(GitHubEventsCollection {
             commits,
@@ -405,7 +224,7 @@ impl GithubApiRestRepository {
         }
     }
 
-    fn extract_commits(
+    fn extract_commits_from_response(
         &self,
         default_branch_ref: Option<DefaultBranchRef>,
         start_date: DateTime<Utc>,
@@ -414,19 +233,22 @@ impl GithubApiRestRepository {
         let mut commits = Vec::new();
 
         if let Some(branch_ref) = default_branch_ref {
-            for commit_node in branch_ref.target.history.nodes {
-                let committed_date =
-                    chrono::DateTime::parse_from_rfc3339(&commit_node.committed_date)
-                        .map(|dt| dt.with_timezone(&chrono::Utc))
-                        .unwrap_or_else(|_| chrono::Utc::now());
+            if let Some(commit_target) = branch_ref.target {
+                for commit_node in commit_target.history.nodes {
+                    if let Some(node) = commit_node {
+                        let committed_date = chrono::DateTime::parse_from_rfc3339(&node.committed_date)
+                            .map(|dt| dt.with_timezone(&chrono::Utc))
+                            .unwrap_or_else(|_| chrono::Utc::now());
 
-                if committed_date >= start_date && committed_date <= end_date {
-                    commits.push(GitHubCommit {
-                        id: commit_node.oid,
-                        message: commit_node.message,
-                        url: commit_node.url,
-                        created_at: committed_date,
-                    });
+                        if committed_date >= start_date && committed_date <= end_date {
+                            commits.push(GitHubCommit {
+                                id: node.oid,
+                                message: node.message,
+                                url: node.url,
+                                created_at: committed_date,
+                            });
+                        }
+                    }
                 }
             }
         }
@@ -434,36 +256,38 @@ impl GithubApiRestRepository {
         Ok(commits)
     }
 
-    fn extract_issues(
+    fn extract_issues_from_response(
         &self,
-        issues_connection: Connection<IssueNode>,
+        issues_connection: IssueConnection,
         start_date: DateTime<Utc>,
         end_date: DateTime<Utc>,
     ) -> Result<Vec<GitHubIssue>> {
         let mut issues = Vec::new();
 
         for issue_node in issues_connection.nodes {
-            let created_at = chrono::DateTime::parse_from_rfc3339(&issue_node.created_at)
-                .map(|dt| dt.with_timezone(&chrono::Utc))
-                .unwrap_or_else(|_| chrono::Utc::now());
+            if let Some(node) = issue_node {
+                let created_at = chrono::DateTime::parse_from_rfc3339(&node.created_at)
+                    .map(|dt| dt.with_timezone(&chrono::Utc))
+                    .unwrap_or_else(|_| chrono::Utc::now());
 
-            if created_at >= start_date && created_at <= end_date {
-                issues.push(GitHubIssue {
-                    id: issue_node.id,
-                    title: issue_node.title,
-                    body: issue_node.body.unwrap_or_default(),
-                    url: issue_node.url,
-                    created_at,
-                });
+                if created_at >= start_date && created_at <= end_date {
+                    issues.push(GitHubIssue {
+                        id: node.id,
+                        title: node.title,
+                        body: node.body.unwrap_or_default(),
+                        url: node.url,
+                        created_at,
+                    });
+                }
             }
         }
 
         Ok(issues)
     }
 
-    fn extract_pull_requests_and_reviews(
+    fn extract_pull_requests_and_reviews_from_response(
         &self,
-        pr_connection: Connection<PullRequestNode>,
+        pr_connection: PullRequestConnection,
         start_date: DateTime<Utc>,
         end_date: DateTime<Utc>,
     ) -> Result<(Vec<GitHubPullRequest>, Vec<GitHubPullRequestReview>)> {
@@ -471,33 +295,37 @@ impl GithubApiRestRepository {
         let mut pull_request_reviews = Vec::new();
 
         for pr_node in pr_connection.nodes {
-            let created_at = chrono::DateTime::parse_from_rfc3339(&pr_node.created_at)
-                .map(|dt| dt.with_timezone(&chrono::Utc))
-                .unwrap_or_else(|_| chrono::Utc::now());
+            if let Some(node) = pr_node {
+                let created_at = chrono::DateTime::parse_from_rfc3339(&node.created_at)
+                    .map(|dt| dt.with_timezone(&chrono::Utc))
+                    .unwrap_or_else(|_| chrono::Utc::now());
 
-            if created_at >= start_date && created_at <= end_date {
-                pull_requests.push(GitHubPullRequest {
-                    id: pr_node.id.clone(),
-                    title: pr_node.title,
-                    body: pr_node.body.unwrap_or_default(),
-                    url: pr_node.url,
-                    created_at,
-                });
+                if created_at >= start_date && created_at <= end_date {
+                    pull_requests.push(GitHubPullRequest {
+                        id: node.id.clone(),
+                        title: node.title,
+                        body: node.body.unwrap_or_default(),
+                        url: node.url,
+                        created_at,
+                    });
 
-                if let Some(reviews) = pr_node.reviews {
-                    for review_node in reviews.nodes {
-                        let review_created_at =
-                            chrono::DateTime::parse_from_rfc3339(&review_node.created_at)
-                                .map(|dt| dt.with_timezone(&chrono::Utc))
-                                .unwrap_or_else(|_| chrono::Utc::now());
+                    if let Some(reviews) = node.reviews {
+                        for review_node in reviews.nodes {
+                            if let Some(review) = review_node {
+                                let review_created_at =
+                                    chrono::DateTime::parse_from_rfc3339(&review.created_at)
+                                        .map(|dt| dt.with_timezone(&chrono::Utc))
+                                        .unwrap_or_else(|_| chrono::Utc::now());
 
-                        if review_created_at >= start_date && review_created_at <= end_date {
-                            pull_request_reviews.push(GitHubPullRequestReview {
-                                id: review_node.id,
-                                body: review_node.body.unwrap_or_default(),
-                                url: review_node.url,
-                                created_at: review_created_at,
-                            });
+                                if review_created_at >= start_date && review_created_at <= end_date {
+                                    pull_request_reviews.push(GitHubPullRequestReview {
+                                        id: review.id,
+                                        body: review.body.unwrap_or_default(),
+                                        url: review.url,
+                                        created_at: review_created_at,
+                                    });
+                                }
+                            }
                         }
                     }
                 }
