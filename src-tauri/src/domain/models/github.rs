@@ -249,6 +249,19 @@ pub struct GitHubCommit {
     pub created_at: DateTime<Utc>,
 }
 
+impl GitHubCommit {
+    pub fn to_activity(&self) -> Activity {
+        Activity {
+            service: "github".to_string(),
+            activity_type: "PushEvent".to_string(),
+            summary: "Pushed commit".to_string(),
+            detail: self.message.clone(),
+            original_url: Some(self.url.clone()),
+            created_at: self.created_at,
+        }
+    }
+}
+
 #[allow(dead_code)]
 pub struct GitHubIssue {
     pub id: String,
@@ -256,6 +269,19 @@ pub struct GitHubIssue {
     pub body: String,
     pub url: String,
     pub created_at: DateTime<Utc>,
+}
+
+impl GitHubIssue {
+    pub fn to_activity(&self) -> Activity {
+        Activity {
+            service: "github".to_string(),
+            activity_type: "IssuesEvent".to_string(),
+            summary: "Opened issue".to_string(),
+            detail: self.title.clone(),
+            original_url: Some(self.url.clone()),
+            created_at: self.created_at,
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -267,12 +293,38 @@ pub struct GitHubPullRequest {
     pub created_at: DateTime<Utc>,
 }
 
+impl GitHubPullRequest {
+    pub fn to_activity(&self) -> Activity {
+        Activity {
+            service: "github".to_string(),
+            activity_type: "PullRequestEvent".to_string(),
+            summary: "Opened pull request".to_string(),
+            detail: self.title.clone(),
+            original_url: Some(self.url.clone()),
+            created_at: self.created_at,
+        }
+    }
+}
+
 #[allow(dead_code)]
 pub struct GitHubPullRequestReview {
     pub id: String,
     pub body: String,
     pub url: String,
     pub created_at: DateTime<Utc>,
+}
+
+impl GitHubPullRequestReview {
+    pub fn to_activity(&self) -> Activity {
+        Activity {
+            service: "github".to_string(),
+            activity_type: "PullRequestReviewEvent".to_string(),
+            summary: "Reviewed pull request".to_string(),
+            detail: self.body.clone(),
+            original_url: Some(self.url.clone()),
+            created_at: self.created_at,
+        }
+    }
 }
 
 #[allow(dead_code)]
