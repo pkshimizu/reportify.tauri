@@ -49,6 +49,7 @@ struct GitHubApiEventRepo {
 #[derive(Deserialize)]
 struct GitHubApiRepository {
     id: i32,
+    owner: GitHubApiUser,
     name: String,
     full_name: String,
     description: Option<String>,
@@ -311,6 +312,11 @@ impl GithubApiRepository for GithubApiRestRepository {
                 .into_iter()
                 .map(|repo| GitHubRepository {
                     id: repo.id,
+                    owner: GitHubUser {
+                        id: repo.owner.id,
+                        username: repo.owner.login,
+                        avatar_url: Some(repo.owner.avatar_url),
+                    },
                     name: repo.name,
                     full_name: repo.full_name,
                     description: repo.description,

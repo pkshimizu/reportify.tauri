@@ -86,7 +86,7 @@ impl FetchGitHubEventsUseCase {
                 let events_collection = self
                     .github_api_repository
                     .get_events_collection(
-                        account.username.clone(),
+                        repository.owner.username.clone(),
                         repository.name.clone(),
                         account.personal_access_token.clone(),
                         start_date,

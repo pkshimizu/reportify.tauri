@@ -11,6 +11,7 @@ pub struct GitHubUser {
 #[derive(Debug, Clone)]
 pub struct GitHubRepository {
     pub id: i32,
+    pub owner: GitHubUser,
     pub name: String,
     pub full_name: String,
     pub description: Option<String>,
