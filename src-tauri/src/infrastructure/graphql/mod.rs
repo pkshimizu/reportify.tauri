@@ -138,12 +138,12 @@ impl GitHubGraphQLClient {
         token: &str,
     ) -> Result<GraphQLResponse<RepositoryData>, anyhow::Error> {
         let query = r#"
-            query GetRepositoryEvents($owner: String!, $name: String!, $startDate: DateTime!, $endDate: DateTime!, $cursor: String) {
+            query GetRepositoryEvents($owner: String!, $name: String!, $startDate: DateTime!, $gitStartDate: GitTimestamp!, $gitEndDate: GitTimestamp!, $cursor: String) {
                 repository(owner: $owner, name: $name) {
                     defaultBranchRef {
                         target {
                             ... on Commit {
-                                history(first: 100, since: $startDate, until: $endDate, after: $cursor) {
+                                history(first: 100, since: $gitStartDate, until: $gitEndDate, after: $cursor) {
                                     nodes {
                                         oid
                                         message
@@ -205,9 +205,16 @@ impl GitHubGraphQLClient {
         variables.insert("name".to_string(), serde_json::Value::String(name));
         variables.insert(
             "startDate".to_string(),
+            serde_json::Value::String(start_date.clone()),
+        );
+        variables.insert(
+            "gitStartDate".to_string(),
             serde_json::Value::String(start_date),
         );
-        variables.insert("endDate".to_string(), serde_json::Value::String(end_date));
+        variables.insert(
+            "gitEndDate".to_string(),
+            serde_json::Value::String(end_date),
+        );
         variables.insert("cursor".to_string(), serde_json::Value::Null);
 
         let request_body = GraphQLRequest {
