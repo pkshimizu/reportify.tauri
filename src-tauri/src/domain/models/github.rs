@@ -10,12 +10,17 @@ pub struct GitHubUser {
 
 #[derive(Debug, Clone)]
 pub struct GitHubRepository {
+    #[allow(unused)]
     pub id: i32,
     pub owner: GitHubUser,
     pub name: String,
+    #[allow(unused)]
     pub full_name: String,
+    #[allow(unused)]
     pub description: Option<String>,
+    #[allow(unused)]
     pub html_url: String,
+    #[allow(unused)]
     pub private: bool,
 }
 

@@ -47,6 +47,7 @@ pub struct CommitTarget {
 pub struct CommitConnection {
     pub nodes: Vec<Option<CommitNode>>,
     #[serde(rename = "pageInfo")]
+    #[allow(unused)]
     pub page_info: PageInfo,
 }
 
@@ -63,6 +64,7 @@ pub struct CommitNode {
 pub struct IssueConnection {
     pub nodes: Vec<Option<IssueNode>>,
     #[serde(rename = "pageInfo")]
+    #[allow(unused)]
     pub page_info: PageInfo,
 }
 
@@ -80,6 +82,7 @@ pub struct IssueNode {
 pub struct PullRequestConnection {
     pub nodes: Vec<Option<PullRequestNode>>,
     #[serde(rename = "pageInfo")]
+    #[allow(unused)]
     pub page_info: PageInfo,
 }
 
@@ -98,6 +101,7 @@ pub struct PullRequestNode {
 pub struct PullRequestReviewConnection {
     pub nodes: Vec<Option<PullRequestReviewNode>>,
     #[serde(rename = "pageInfo")]
+    #[allow(unused)]
     pub page_info: PageInfo,
 }
 
@@ -113,8 +117,10 @@ pub struct PullRequestReviewNode {
 #[derive(Deserialize, Debug)]
 pub struct PageInfo {
     #[serde(rename = "hasNextPage")]
+    #[allow(unused)]
     pub has_next_page: bool,
     #[serde(rename = "endCursor")]
+    #[allow(unused)]
     pub end_cursor: Option<String>,
 }
 
