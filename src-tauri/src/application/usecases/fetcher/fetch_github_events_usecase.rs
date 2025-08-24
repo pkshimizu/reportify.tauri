@@ -78,33 +78,41 @@ impl FetchGitHubEventsUseCase {
         let github_accounts = self.settings_repository.load_githubs().await?;
 
         for account in github_accounts {
-            let events_collection = self.github_api_repository
-                .get_events_collection(
-                    account.username.clone(),
-                    account.personal_access_token.clone(),
-                    start_date,
-                    end_date,
-                )
+            let repositories = self
+                .github_api_repository
+                .get_repositories(account.personal_access_token.clone())
                 .await?;
+            for repository in repositories {
+                let events_collection = self
+                    .github_api_repository
+                    .get_events_collection(
+                        account.username.clone(),
+                        repository.name.clone(),
+                        account.personal_access_token.clone(),
+                        start_date,
+                        end_date,
+                    )
+                    .await?;
 
-            for commit in events_collection.commits {
-                let activity = commit.to_activity();
-                let _ = self.activity_repository.save(activity).await;
-            }
+                for commit in events_collection.commits {
+                    let activity = commit.to_activity();
+                    let _ = self.activity_repository.save(activity).await;
+                }
 
-            for issue in events_collection.issues {
-                let activity = issue.to_activity();
-                let _ = self.activity_repository.save(activity).await;
-            }
+                for issue in events_collection.issues {
+                    let activity = issue.to_activity();
+                    let _ = self.activity_repository.save(activity).await;
+                }
 
-            for pull_request in events_collection.pull_requests {
-                let activity = pull_request.to_activity();
-                let _ = self.activity_repository.save(activity).await;
-            }
+                for pull_request in events_collection.pull_requests {
+                    let activity = pull_request.to_activity();
+                    let _ = self.activity_repository.save(activity).await;
+                }
 
-            for review in events_collection.pull_request_reviews {
-                let activity = review.to_activity();
-                let _ = self.activity_repository.save(activity).await;
+                for review in events_collection.pull_request_reviews {
+                    let activity = review.to_activity();
+                    let _ = self.activity_repository.save(activity).await;
+                }
             }
         }
 

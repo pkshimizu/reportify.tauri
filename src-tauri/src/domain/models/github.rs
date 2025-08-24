@@ -8,6 +8,16 @@ pub struct GitHubUser {
     pub avatar_url: Option<String>,
 }
 
+#[derive(Debug, Clone)]
+pub struct GitHubRepository {
+    pub id: i32,
+    pub name: String,
+    pub full_name: String,
+    pub description: Option<String>,
+    pub html_url: String,
+    pub private: bool,
+}
+
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[allow(dead_code)]
 pub struct GitHubEvent {
