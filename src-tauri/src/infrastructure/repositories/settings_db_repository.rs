@@ -6,13 +6,15 @@ use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, Set};
 use crate::{
     domain::{
         models::{
-            settings::{Settings, SettingsGithub},
+            github::GitHubRepository,
+            settings::{Settings, SettingsGithub, SettingsGithubRepository},
             GitHubUser, Theme,
         },
         repositories::SettingsRepository,
     },
     infrastructure::database::entities::{
-        settings, settings_github, SettingsEntity, SettingsGithubEntity,
+        settings, settings_github, settings_github_repositories, SettingsEntity,
+        SettingsGithubEntity, SettingsGithubRepositoriesEntity,
     },
 };
 
@@ -138,6 +140,57 @@ impl SettingsRepository for SettingsDbRepository {
         active_model.updated_at = Set(Utc::now());
 
         active_model.update(&self.db_connection).await?;
+
+        Ok(())
+    }
+
+    async fn add_github_repository(
+        &self,
+        repository: GitHubRepository,
+    ) -> Result<SettingsGithubRepository> {
+        let now = Utc::now();
+        let active_model = settings_github_repositories::ActiveModel {
+            id: sea_orm::NotSet,
+            github_repository_id: Set(repository.id),
+            name: Set(repository.name),
+            full_name: Set(repository.full_name),
+            description: Set(repository.description),
+            private: Set(repository.private),
+            owner_name: Set(repository.owner.username),
+            created_at: Set(now),
+            updated_at: Set(now),
+        };
+
+        let result = active_model.insert(&self.db_connection).await?;
+
+        Ok(SettingsGithubRepository::new(
+            result.id,
+            result.github_repository_id,
+            result.name,
+            result.full_name,
+            result.description,
+            result.private,
+            result.owner_name,
+            result.created_at,
+            result.updated_at,
+        ))
+    }
+
+    async fn remove_github_repository(&self, github_repository_id: i32) -> Result<()> {
+        use sea_orm::ColumnTrait;
+        use sea_orm::QueryFilter;
+
+        let repository_setting = SettingsGithubRepositoriesEntity::find()
+            .filter(
+                settings_github_repositories::Column::GithubRepositoryId.eq(github_repository_id),
+            )
+            .one(&self.db_connection)
+            .await?
+            .ok_or_else(|| anyhow::anyhow!("GitHub repository setting not found"))?;
+
+        SettingsGithubRepositoriesEntity::delete_by_id(repository_setting.id)
+            .exec(&self.db_connection)
+            .await?;
 
         Ok(())
     }

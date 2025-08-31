@@ -1,6 +1,7 @@
 use anyhow::Result;
 
-use crate::domain::models::settings::{Settings, SettingsGithub};
+use crate::domain::models::github::GitHubRepository;
+use crate::domain::models::settings::{Settings, SettingsGithub, SettingsGithubRepository};
 use crate::domain::models::{GitHubUser, Theme};
 
 #[async_trait::async_trait]
@@ -21,4 +22,11 @@ pub trait SettingsRepository: Send + Sync {
         setting_github_id: i32,
         github_event_id: String,
     ) -> Result<()>;
+
+    // GitHub repository settings methods
+    async fn add_github_repository(
+        &self,
+        repository: GitHubRepository,
+    ) -> Result<SettingsGithubRepository>;
+    async fn remove_github_repository(&self, github_repository_id: i32) -> Result<()>;
 }

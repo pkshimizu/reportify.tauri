@@ -9,8 +9,8 @@ use application::usecases::activities::LoadActivitiesUseCase;
 use application::usecases::fetcher::FetchGitHubEventsUseCase;
 use application::usecases::github::LoadGithubRepositoriesUseCase;
 use application::usecases::settings::{
-    CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
-    SaveThemeUseCase,
+    AddGitHubRepositoryUseCase, CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase,
+    LoadSettingsUseCase, RemoveGitHubRepositoryUseCase, SaveThemeUseCase,
 };
 use infrastructure::{
     database::DatabaseConnection,
@@ -19,8 +19,9 @@ use infrastructure::{
     },
 };
 use presentation::commands::{
-    create_github, delete_github, fetch_github_events, fetch_github_events_with_range,
-    load_activities, load_github_repositories, load_githubs, load_settings, save_theme,
+    add_github_repository, create_github, delete_github, fetch_github_events,
+    fetch_github_events_with_range, load_activities, load_github_repositories, load_githubs,
+    load_settings, remove_github_repository, save_theme,
 };
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -79,6 +80,13 @@ async fn run_async() {
         github_api_repository.clone(),
         settings_repository.clone(),
     ));
+    let add_github_repository_usecase = Arc::new(AddGitHubRepositoryUseCase::new(
+        settings_repository.clone(),
+        github_api_repository.clone(),
+    ));
+    let remove_github_repository_usecase = Arc::new(RemoveGitHubRepositoryUseCase::new(
+        settings_repository.clone(),
+    ));
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
@@ -90,6 +98,8 @@ async fn run_async() {
         .manage(fetch_github_events_usecase)
         .manage(load_activities_usecase)
         .manage(load_github_repositories_usecase)
+        .manage(add_github_repository_usecase)
+        .manage(remove_github_repository_usecase)
         .invoke_handler(tauri::generate_handler![
             load_settings,
             save_theme,
@@ -100,6 +110,8 @@ async fn run_async() {
             fetch_github_events_with_range,
             load_activities,
             load_github_repositories,
+            add_github_repository,
+            remove_github_repository,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -51,3 +51,43 @@ impl SettingsGithub {
         }
     }
 }
+
+#[derive(Debug, Clone)]
+pub struct SettingsGithubRepository {
+    pub id: i32,
+    pub github_repository_id: i32,
+    pub name: String,
+    pub full_name: String,
+    pub description: Option<String>,
+    pub private: bool,
+    pub owner_name: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
+impl SettingsGithubRepository {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        id: i32,
+        github_repository_id: i32,
+        name: String,
+        full_name: String,
+        description: Option<String>,
+        private: bool,
+        owner_name: String,
+        created_at: DateTime<Utc>,
+        updated_at: DateTime<Utc>,
+    ) -> Self {
+        Self {
+            id,
+            github_repository_id,
+            name,
+            full_name,
+            description,
+            private,
+            owner_name,
+            created_at,
+            updated_at,
+        }
+    }
+}

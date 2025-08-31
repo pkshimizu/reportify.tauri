@@ -7,8 +7,8 @@ use crate::application::usecases::activities::LoadActivitiesUseCase;
 use crate::application::usecases::fetcher::FetchGitHubEventsUseCase;
 use crate::application::usecases::github::LoadGithubRepositoriesUseCase;
 use crate::application::usecases::settings::{
-    CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
-    SaveThemeUseCase,
+    AddGitHubRepositoryUseCase, CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase,
+    LoadSettingsUseCase, RemoveGitHubRepositoryUseCase, SaveThemeUseCase,
 };
 use crate::domain::models::Theme;
 
@@ -179,4 +179,42 @@ pub async fn load_github_repositories(
         }
         Err(e) => Err(format!("Failed to load GitHub repositories: {e}")),
     }
+}
+
+#[tauri::command]
+pub async fn add_github_repository(
+    github_repository_id: i32,
+    add_github_repository_usecase: State<'_, Arc<AddGitHubRepositoryUseCase>>,
+) -> Result<serde_json::Value, String> {
+    match add_github_repository_usecase
+        .execute(github_repository_id)
+        .await
+    {
+        Ok(repository) => {
+            let json = serde_json::json!({
+                "id": repository.id,
+                "githubRepositoryId": repository.github_repository_id,
+                "name": repository.name,
+                "fullName": repository.full_name,
+                "description": repository.description,
+                "private": repository.private,
+                "ownerName": repository.owner_name,
+                "createdAt": repository.created_at.to_rfc3339(),
+                "updatedAt": repository.updated_at.to_rfc3339()
+            });
+            Ok(json)
+        }
+        Err(e) => Err(format!("Failed to add GitHub repository: {e}")),
+    }
+}
+
+#[tauri::command]
+pub async fn remove_github_repository(
+    github_repository_id: i32,
+    remove_github_repository_usecase: State<'_, Arc<RemoveGitHubRepositoryUseCase>>,
+) -> Result<(), String> {
+    remove_github_repository_usecase
+        .execute(github_repository_id)
+        .await
+        .map_err(|e| format!("Failed to remove GitHub repository: {e}"))
 }
