@@ -4,9 +4,8 @@ use chrono::{DateTime, Utc};
 use tauri::State;
 
 use crate::application::usecases::activities::LoadActivitiesUseCase;
-use crate::application::usecases::fetcher::{
-    FetchGitHubEventsUseCase, LoadGithubRepositoriesUseCase,
-};
+use crate::application::usecases::fetcher::FetchGitHubEventsUseCase;
+use crate::application::usecases::github::LoadGithubRepositoriesUseCase;
 use crate::application::usecases::settings::{
     CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
     SaveThemeUseCase,

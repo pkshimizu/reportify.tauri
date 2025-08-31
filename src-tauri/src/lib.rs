@@ -6,7 +6,8 @@ mod infrastructure;
 mod presentation;
 
 use application::usecases::activities::LoadActivitiesUseCase;
-use application::usecases::fetcher::{FetchGitHubEventsUseCase, LoadGithubRepositoriesUseCase};
+use application::usecases::fetcher::FetchGitHubEventsUseCase;
+use application::usecases::github::LoadGithubRepositoriesUseCase;
 use application::usecases::settings::{
     CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
     SaveThemeUseCase,
