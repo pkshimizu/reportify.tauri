@@ -6,7 +6,7 @@ mod infrastructure;
 mod presentation;
 
 use application::usecases::activities::LoadActivitiesUseCase;
-use application::usecases::fetcher::FetchGitHubEventsUseCase;
+use application::usecases::fetcher::{FetchGitHubEventsUseCase, LoadGithubRepositoriesUseCase};
 use application::usecases::settings::{
     CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
     SaveThemeUseCase,
@@ -19,7 +19,7 @@ use infrastructure::{
 };
 use presentation::commands::{
     create_github, delete_github, fetch_github_events, fetch_github_events_with_range,
-    load_activities, load_githubs, load_settings, save_theme,
+    load_activities, load_github_repositories, load_githubs, load_settings, save_theme,
 };
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -74,6 +74,10 @@ async fn run_async() {
         activity_repository.clone(),
     ));
     let load_activities_usecase = Arc::new(LoadActivitiesUseCase::new(activity_repository.clone()));
+    let load_github_repositories_usecase = Arc::new(LoadGithubRepositoriesUseCase::new(
+        github_api_repository.clone(),
+        settings_repository.clone(),
+    ));
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
@@ -84,6 +88,7 @@ async fn run_async() {
         .manage(delete_github_usecase)
         .manage(fetch_github_events_usecase)
         .manage(load_activities_usecase)
+        .manage(load_github_repositories_usecase)
         .invoke_handler(tauri::generate_handler![
             load_settings,
             save_theme,
@@ -93,6 +98,7 @@ async fn run_async() {
             fetch_github_events,
             fetch_github_events_with_range,
             load_activities,
+            load_github_repositories,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

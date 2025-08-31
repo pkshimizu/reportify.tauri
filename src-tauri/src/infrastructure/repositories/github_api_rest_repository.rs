@@ -8,10 +8,10 @@ use crate::domain::models::github::{
     GitHubIssue, GitHubPullRequest, GitHubPullRequestReview, GitHubRepository, GitHubUser,
 };
 use crate::domain::repositories::GithubApiRepository;
-use crate::infrastructure::clients::{GitHubRestApiClient, GitHubGraphQLClient};
 use crate::infrastructure::clients::github_graphql_api_client::{
     DefaultBranchRef, IssueConnection, PullRequestConnection,
 };
+use crate::infrastructure::clients::{GitHubGraphQLClient, GitHubRestApiClient};
 
 #[derive(Deserialize)]
 struct GitHubApiUser {

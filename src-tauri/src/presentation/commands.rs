@@ -4,7 +4,9 @@ use chrono::{DateTime, Utc};
 use tauri::State;
 
 use crate::application::usecases::activities::LoadActivitiesUseCase;
-use crate::application::usecases::fetcher::FetchGitHubEventsUseCase;
+use crate::application::usecases::fetcher::{
+    FetchGitHubEventsUseCase, LoadGithubRepositoriesUseCase,
+};
 use crate::application::usecases::settings::{
     CreateGithubUseCase, DeleteGithubUseCase, LoadGithubsUseCase, LoadSettingsUseCase,
     SaveThemeUseCase,
@@ -147,5 +149,35 @@ pub async fn load_activities(
             Ok(serde_json::json!(json_activities))
         }
         Err(e) => Err(format!("Failed to load activities: {e}")),
+    }
+}
+
+#[tauri::command]
+pub async fn load_github_repositories(
+    load_github_repositories_usecase: State<'_, Arc<LoadGithubRepositoriesUseCase>>,
+) -> Result<serde_json::Value, String> {
+    match load_github_repositories_usecase.execute().await {
+        Ok(repositories) => {
+            let json_repositories: Vec<serde_json::Value> = repositories
+                .into_iter()
+                .map(|repository| {
+                    serde_json::json!({
+                        "id": repository.id,
+                        "name": repository.name,
+                        "fullName": repository.full_name,
+                        "description": repository.description,
+                        "htmlUrl": repository.html_url,
+                        "private": repository.private,
+                        "owner": {
+                            "id": repository.owner.id,
+                            "username": repository.owner.username,
+                            "avatarUrl": repository.owner.avatar_url
+                        }
+                    })
+                })
+                .collect();
+            Ok(serde_json::json!(json_repositories))
+        }
+        Err(e) => Err(format!("Failed to load GitHub repositories: {e}")),
     }
 }
