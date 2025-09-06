@@ -1,8 +1,5 @@
 import RText from '@/components/display/text';
-import RSyncIcon from '@/components/icons/sync';
-import RIconButton from '@/components/input/icon-button';
-import { RCenter, RColumn, RRow } from '@/components/layout/flex-box';
-import useActivities from '@/hooks/activities';
+import { RCenter, RColumn } from '@/components/layout/flex-box';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
@@ -10,21 +7,10 @@ export const Route = createFileRoute('/')({
 });
 
 function Index() {
-  const { fetchGitHubEvents, fetching } = useActivities();
-
-  const handleFetchGithubEvents = () => {
-    fetchGitHubEvents();
-  };
-
   return (
     <RCenter>
       <RColumn gap={2}>
         <RText>Welcome reportify</RText>
-        <RRow justify='center'>
-          <RIconButton loading={fetching} onClick={handleFetchGithubEvents}>
-            <RSyncIcon />
-          </RIconButton>
-        </RRow>
       </RColumn>
     </RCenter>
   );
