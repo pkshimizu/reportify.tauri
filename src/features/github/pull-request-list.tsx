@@ -82,27 +82,33 @@ export default function GitHubPullRequestList() {
       {pullRequests.map(pullRequest => (
         <RColumn key={pullRequest.id}>
           <RColumn>
-            <RRow gap={1} align='center'>
-              <RImage
-                src={pullRequest.owner.image}
-                alt={pullRequest.owner.name}
-                width={20}
-                height={20}
-                circle
-              />
-              <RText>{pullRequest.owner.name}</RText>
-              <RText>/</RText>
-              <RImage
-                src={pullRequest.repository.image}
-                alt={pullRequest.repository.name}
-                width={20}
-                height={20}
-                circle
-              />
-              <RText>{pullRequest.repository.name}</RText>
-            </RRow>
+            <RGrid columns={['1fr', '280px']} gap={1} alignItems='end'>
+              <RRow gap={1} align='center'>
+                <RImage
+                  src={pullRequest.owner.image}
+                  alt={pullRequest.owner.name}
+                  width={20}
+                  height={20}
+                  circle
+                />
+                <RText>{pullRequest.owner.name}</RText>
+                <RText>/</RText>
+                <RImage
+                  src={pullRequest.repository.image}
+                  alt={pullRequest.repository.name}
+                  width={20}
+                  height={20}
+                  circle
+                />
+                <RText>{pullRequest.repository.name}</RText>
+              </RRow>
+              <RRow gap={1}>
+                <RText size='small'>{pullRequest.createdAt}作成</RText>
+                <RText size='small'>{pullRequest.updatedAt}更新</RText>
+              </RRow>
+            </RGrid>
             <RBox bgcolor='card' p={1}>
-              <RGrid columns={['1fr', '180px', '160px', '200px']} gap={1}>
+              <RGrid columns={['1fr', '160px', '200px']} gap={1}>
                 <RLink href={pullRequest.url} overflow='hidden'>
                   <RRow align='center' overflow='hidden' fullHeight>
                     <RText whiteSpace='nowrap' overflow='hidden'>
@@ -110,10 +116,6 @@ export default function GitHubPullRequestList() {
                     </RText>
                   </RRow>
                 </RLink>
-                <RColumn justify='center'>
-                  <RText>{pullRequest.createdAt}作成</RText>
-                  <RText>{pullRequest.updatedAt}更新</RText>
-                </RColumn>
                 <RColumn>
                   <RText size='small'>Assignee</RText>
                   <RRow gap={1} align='center'>
