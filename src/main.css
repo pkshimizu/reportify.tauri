@@ -3,6 +3,7 @@ html {
   -webkit-user-drag: none;
   user-select: none;
   cursor: default;
+  overflow-x: hidden;
 }
 
 input,
@@ -21,4 +22,9 @@ img {
   -webkit-user-select: auto;
   user-select: auto;
   cursor: auto;
+}
+
+.MuiToolbar-root {
+  height: 36px !important;
+  min-height: 36px !important;
 }

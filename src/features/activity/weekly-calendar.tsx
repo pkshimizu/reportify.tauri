@@ -82,7 +82,7 @@ export default function ActivityWeeklyCalendar() {
             <RColumn align='center'>
               <RText color={color}>{day.dayOfWeek}</RText>
               <RText color={color}>{day.date}</RText>
-              <RBox height={100} justify='center' align='center'>
+              <RBox height={64} justify='center' align='center'>
                 <RColumn>
                   <RRow gap={1} align='center'>
                     <RGitHubIcon />

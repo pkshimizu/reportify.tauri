@@ -7,7 +7,7 @@ interface Props {
 
 export default function RAppBar(props: Props) {
   return (
-    <AppBar position='static' color='default' elevation={1}>
+    <AppBar position='fixed' color='default' elevation={1}>
       <Toolbar>{props.children}</Toolbar>
     </AppBar>
   );
