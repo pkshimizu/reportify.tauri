@@ -13,9 +13,9 @@
     "windows": [
       {
         "title": "reportify",
-        "width": 800,
+        "width": 860,
         "height": 720,
-        "minWidth": 800,
+        "minWidth": 860,
         "minHeight": 720
       }
     ],
