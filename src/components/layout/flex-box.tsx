@@ -28,6 +28,8 @@ interface Props {
   basis?: number | string;
   flex?: string | number;
   overflow?: 'hidden' | 'visible' | 'scroll' | 'auto';
+  width?: number;
+  fullWidth?: boolean;
   height?: number;
   fullHeight?: boolean;
   children: React.ReactNode;
@@ -47,6 +49,8 @@ export default function RFlexBox({
   basis,
   flex,
   overflow,
+  width,
+  fullWidth,
   height,
   fullHeight,
   children,
@@ -66,7 +70,8 @@ export default function RFlexBox({
     ...(basis !== undefined && { flexBasis: basis }),
     ...(flex !== undefined && { flex }),
     ...(overflow !== undefined && { overflow }),
-    width: '100%',
+    ...(width !== undefined && { width }),
+    ...(fullWidth && { width: '100%' }),
     ...(height !== undefined && { height }),
     ...(fullHeight && { height: '100%' }),
   };

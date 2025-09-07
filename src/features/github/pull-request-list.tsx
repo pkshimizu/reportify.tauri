@@ -5,8 +5,11 @@ import RCommentIcon from '@/components/icons/comment';
 import { RColumn, RRow } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
 import RLink from '@/components/navigation/link';
+import useDay from '@/hooks/day';
 
 export default function GitHubPullRequestList() {
+  const day = useDay();
+
   const pullRequests = [
     {
       id: '1',
@@ -38,8 +41,8 @@ export default function GitHubPullRequestList() {
       ],
       title: 'Add support for Tauri',
       url: 'https://github.com/pkshimizu/reportify.tauri/pull/1',
-      createdAt: '2021-01-01 00:00',
-      updatedAt: '2021-01-01 00:00',
+      createdAt: day.fromNow('2025-08-01T00:00'),
+      updatedAt: day.fromNow('2025-08-02T00:00'),
     },
     {
       id: '1',
@@ -72,8 +75,8 @@ export default function GitHubPullRequestList() {
       title:
         'feat: add support for Tauri. fix: fix bugs. WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
       url: 'https://github.com/pkshimizu/reportify.tauri/pull/1',
-      createdAt: '2021-01-01 00:00',
-      updatedAt: '2021-01-01 00:00',
+      createdAt: day.fromNow('2025-08-01T00:00'),
+      updatedAt: day.fromNow('2025-08-02T00:00'),
     },
   ];
 
@@ -82,7 +85,7 @@ export default function GitHubPullRequestList() {
       {pullRequests.map(pullRequest => (
         <RColumn key={pullRequest.id}>
           <RColumn>
-            <RGrid columns={['1fr', '280px']} gap={1} alignItems='end'>
+            <RGrid columns={['1fr', '330px']} gap={1} alignItems='end'>
               <RRow gap={1} align='center'>
                 <RImage
                   src={pullRequest.owner.image}
@@ -102,9 +105,15 @@ export default function GitHubPullRequestList() {
                 />
                 <RText>{pullRequest.repository.name}</RText>
               </RRow>
-              <RRow gap={1}>
-                <RText size='small'>{pullRequest.createdAt}作成</RText>
-                <RText size='small'>{pullRequest.updatedAt}更新</RText>
+              <RRow gap={2} justify='flex-end'>
+                <RRow gap={0.5} align='flex-end'>
+                  <RText size='small'>{pullRequest.createdAt}</RText>
+                  <RText size='small'>created</RText>
+                </RRow>
+                <RRow gap={0.5} align='flex-end'>
+                  <RText size='small'>{pullRequest.updatedAt}</RText>
+                  <RText size='small'>updated</RText>
+                </RRow>
               </RRow>
             </RGrid>
             <RBox bgcolor='card' p={1}>
