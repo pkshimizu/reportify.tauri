@@ -1,11 +1,11 @@
-import { MainColor, bgColor } from '@/models/color';
+import { Color, bgColor } from '@/models/color';
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface Props {
   width?: number;
   height?: number;
-  bgcolor?: MainColor;
+  bgcolor?: Color;
   align?: 'center' | 'start' | 'end';
   justify?: 'center' | 'start' | 'end';
   aspectRatio?: number;
@@ -50,6 +50,7 @@ export default function RBox(props: Props) {
         ...(props.pb && { paddingBottom: props.pb }),
         ...(props.pl && { paddingLeft: props.pl }),
         ...(props.px && { paddingLeft: props.px, paddingRight: props.px }),
+        ...(props.py && { paddingTop: props.py, paddingBottom: props.py }),
         flexGrow: 1,
       }}
     >

@@ -59,6 +59,7 @@ export default function RFlexBox({
     ...(shrink !== undefined && { flexShrink: shrink }),
     ...(basis !== undefined && { flexBasis: basis }),
     ...(flex !== undefined && { flex }),
+    width: '100%',
   };
 
   return <Box sx={{ ...flexStyles }}>{children}</Box>;

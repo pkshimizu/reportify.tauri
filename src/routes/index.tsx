@@ -1,5 +1,6 @@
-import RText from '@/components/display/text';
+import RBox from '@/components/display/box';
 import { RCenter, RColumn } from '@/components/layout/flex-box';
+import ActivityWeeklyCalendar from '@/features/activity/weekly-calendar';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
@@ -10,7 +11,9 @@ function Index() {
   return (
     <RCenter>
       <RColumn gap={2}>
-        <RText>Welcome reportify</RText>
+        <RBox m={2}>
+          <ActivityWeeklyCalendar />
+        </RBox>
       </RColumn>
     </RCenter>
   );

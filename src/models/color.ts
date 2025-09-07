@@ -1,3 +1,5 @@
+import { blue, grey, red } from '@mui/material/colors';
+
 export type MainColor =
   | 'inherit'
   | 'primary'
@@ -17,11 +19,11 @@ export function textColor(color?: Color) {
     case 'inherit':
       return 'inherit';
     case 'weekday':
-      return 'text.primary';
+      return grey[900];
     case 'sat':
-      return '#0000ff';
+      return blue[900];
     case 'sun':
-      return '#ff0000';
+      return red[900];
     case 'outside':
       return 'text.disabled';
     default:
@@ -35,11 +37,11 @@ export function bgColor(color?: Color) {
     case 'inherit':
       return 'inherit';
     case 'weekday':
-      return 'background.paper';
+      return grey[100];
     case 'sat':
-      return 'background.secondary';
+      return blue[100];
     case 'sun':
-      return 'background.tertiary';
+      return red[100];
     default:
       return `${color}.main`;
   }
