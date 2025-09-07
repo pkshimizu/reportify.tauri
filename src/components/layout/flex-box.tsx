@@ -27,6 +27,9 @@ interface Props {
   shrink?: number;
   basis?: number | string;
   flex?: string | number;
+  overflow?: 'hidden' | 'visible' | 'scroll' | 'auto';
+  height?: number;
+  fullHeight?: boolean;
   children: React.ReactNode;
 }
 
@@ -43,6 +46,9 @@ export default function RFlexBox({
   shrink,
   basis,
   flex,
+  overflow,
+  height,
+  fullHeight,
   children,
 }: Props) {
   const flexStyles = {
@@ -59,7 +65,10 @@ export default function RFlexBox({
     ...(shrink !== undefined && { flexShrink: shrink }),
     ...(basis !== undefined && { flexBasis: basis }),
     ...(flex !== undefined && { flex }),
+    ...(overflow !== undefined && { overflow }),
     width: '100%',
+    ...(height !== undefined && { height }),
+    ...(fullHeight && { height: '100%' }),
   };
 
   return <Box sx={{ ...flexStyles }}>{children}</Box>;

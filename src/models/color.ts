@@ -11,7 +11,9 @@ export type MainColor =
 
 export type DayColor = 'weekday' | 'sat' | 'sun' | 'outside';
 
-export type Color = MainColor | DayColor;
+export type CardColor = 'card';
+
+export type Color = MainColor | DayColor | CardColor;
 
 export function textColor(color?: Color) {
   if (!color) return undefined;
@@ -26,6 +28,8 @@ export function textColor(color?: Color) {
       return red[900];
     case 'outside':
       return 'text.disabled';
+    case 'card':
+      return grey[900];
     default:
       return `${color}.contrastText`;
   }
@@ -42,6 +46,8 @@ export function bgColor(color?: Color) {
       return blue[100];
     case 'sun':
       return red[100];
+    case 'card':
+      return grey[100];
     default:
       return `${color}.main`;
   }
