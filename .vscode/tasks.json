@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tauri: build-debug",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["tauri", "build", "--debug"],
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "tauri: dev-debug",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["tauri", "dev"],
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "RUST_LOG": "debug",
+          "RUST_BACKTRACE": "1"
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "new"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Tauri App",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/src-tauri/target/debug/reportify",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "tauri: build-debug",
+      "env": {
+        "RUST_LOG": "debug",
+        "RUST_BACKTRACE": "1"
+      },
+      "sourceLanguages": ["rust"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Tauri Development Debug",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["tauri", "dev"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "env": {
+        "RUST_BACKTRACE": "1",
+        "RUST_LOG": "debug"
+      }
+    },
+    {
+      "name": "Frontend Development Server",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "port": 1420
+    },
+    {
+      "name": "Attach to Tauri Process",
+      "type": "lldb",
+      "request": "attach",
+      "program": "${workspaceFolder}/src-tauri/target/debug/reportify",
+      "waitFor": true,
+      "sourceLanguages": ["rust"]
+    }
+  ]
+}
