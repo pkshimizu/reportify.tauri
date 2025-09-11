@@ -1,6 +1,8 @@
 import RBox from '@/components/display/box';
 import RImage from '@/components/display/image';
 import RText from '@/components/display/text';
+import RCautionIcon from '@/components/icons/caution';
+import RCheckIcon from '@/components/icons/check';
 import RCommentIcon from '@/components/icons/comment';
 import { RColumn, RRow } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
@@ -31,12 +33,14 @@ export default function GitHubPullRequestList() {
           image: 'https://avatars.githubusercontent.com/u/300403?v=4',
           name: 'pkshimizu',
           comments: 10,
+          status: 'approved',
         },
         {
           id: '2',
           image: 'https://avatars.githubusercontent.com/u/300403?v=4',
           name: 'pkshimizu',
           comments: 0,
+          status: 'commented',
         },
       ],
       title: 'Add support for Tauri',
@@ -64,12 +68,14 @@ export default function GitHubPullRequestList() {
           image: 'https://avatars.githubusercontent.com/u/300403?v=4',
           name: 'pkshimizu',
           comments: 999,
+          status: 'request_changes',
         },
         {
           id: '2',
           image: 'https://avatars.githubusercontent.com/u/300403?v=4',
           name: 'pkshimizu',
           comments: 0,
+          status: 'commented',
         },
       ],
       title:
@@ -105,11 +111,12 @@ export default function GitHubPullRequestList() {
                 />
                 <RText>{pullRequest.repository.name}</RText>
               </RRow>
-              <RRow gap={2} justify='flex-end'>
+              <RRow gap={1} justify='flex-end'>
                 <RRow gap={0.5} align='flex-end'>
                   <RText size='small'>{pullRequest.createdAt}</RText>
                   <RText size='small'>created</RText>
                 </RRow>
+                <RText size='small'>/</RText>
                 <RRow gap={0.5} align='flex-end'>
                   <RText size='small'>{pullRequest.updatedAt}</RText>
                   <RText size='small'>updated</RText>
@@ -156,7 +163,15 @@ export default function GitHubPullRequestList() {
                       />
                       <RText>{reviewer.name}</RText>
                       <RRow align='center' gap={0.5}>
-                        <RCommentIcon size='small' />
+                        {reviewer.status === 'commented' && (
+                          <RCommentIcon size='small' />
+                        )}
+                        {reviewer.status === 'approved' && (
+                          <RCheckIcon size='small' color='success' />
+                        )}
+                        {reviewer.status === 'request_changes' && (
+                          <RCautionIcon size='small' color='warning' />
+                        )}
                         <RText>{reviewer.comments}</RText>
                       </RRow>
                     </RGrid>
