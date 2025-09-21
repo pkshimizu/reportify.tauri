@@ -1,3 +1,4 @@
+import RTable from '@/components/display/table';
 import RText from '@/components/display/text';
 import RButton from '@/components/input/button';
 import RTextField from '@/components/input/text-field';
@@ -28,6 +29,13 @@ export default function GitHubPanel() {
         </RGridItem>
       </RGrid>
       <RText>Target Repositories</RText>
+      <RTable
+        columns={[
+          { name: 'Owner', align: 'left', width: 100 },
+          { name: 'Repository', align: 'left', width: 200 },
+        ]}
+        rows={[{ id: '1', cells: { Owner: 'Repo 1', Repository: 'Repo 1' } }]}
+      />
     </RColumn>
   );
 }
