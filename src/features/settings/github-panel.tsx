@@ -1,3 +1,4 @@
+import RImage from '@/components/display/image';
 import RTable from '@/components/display/table';
 import RText from '@/components/display/text';
 import RAddIcon from '@/components/icons/add';
@@ -31,6 +32,17 @@ export default function GitHubPanel() {
           </RButton>
         </RGridItem>
       </RGrid>
+      <RRow gap={1} align='center'>
+        <RImage
+          src='https://avatars.githubusercontent.com/u/300403?v=4'
+          alt='pkshimizu'
+          width={20}
+          height={20}
+          circle
+        />
+        <RText>pkshimizu</RText>
+        <RText>2025-12-31 12:34:56 expires</RText>
+      </RRow>
       <RRow gap={1} align='center'>
         <RText>Repositories</RText>
         <RIconButton>
