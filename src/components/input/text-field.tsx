@@ -4,6 +4,7 @@ import { ChangeEvent } from 'react';
 interface Props {
   value: string;
   readonly?: boolean;
+  fullWidth?: boolean;
   onChange: (value: string) => void;
 }
 
@@ -18,6 +19,7 @@ export default function RTextField(props: Props) {
       onChange={handleChange}
       size='small'
       inputProps={{ readOnly: props.readonly }}
+      fullWidth={props.fullWidth}
     />
   );
 }

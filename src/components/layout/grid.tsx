@@ -44,8 +44,6 @@ export default function RGrid(props: Props) {
     ...(props.alignItems && { alignItems: props.alignItems }),
     ...(props.justifyContent && { justifyContent: props.justifyContent }),
     ...(props.alignContent && { alignContent: props.alignContent }),
-    flexGrow: 1,
-    width: '100%',
   };
 
   return <Box sx={{ ...gridStyles }}>{props.children}</Box>;

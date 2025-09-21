@@ -40,7 +40,7 @@ function RListItem(props: { item: Item }) {
 
 export default function RList(props: Props) {
   return (
-    <List>
+    <List sx={{ padding: 0 }}>
       {props.items.map(item => (
         <RListItem key={item.id} item={item} />
       ))}
