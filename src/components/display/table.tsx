@@ -10,6 +10,7 @@ import { ReactNode } from 'react';
 
 interface Column {
   name: string;
+  cell?: ReactNode;
   align?: 'left' | 'center' | 'right';
   width?: number;
 }
@@ -47,7 +48,7 @@ export default function RTable({ columns, rows }: Props) {
               width={column.width}
               align={column.align}
             >
-              {column.name}
+              {column.cell}
             </TableCell>
           ))}
         </TableHead>

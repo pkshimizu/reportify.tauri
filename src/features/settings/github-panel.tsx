@@ -1,8 +1,11 @@
 import RTable from '@/components/display/table';
 import RText from '@/components/display/text';
+import RAddIcon from '@/components/icons/add';
+import RRemoveIcon from '@/components/icons/remove';
 import RButton from '@/components/input/button';
+import RIconButton from '@/components/input/icon-button';
 import RTextField from '@/components/input/text-field';
-import { RColumn } from '@/components/layout/flex-box';
+import { RColumn, RRow } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
 import RGridItem from '@/components/layout/grid-item';
 import { useState } from 'react';
@@ -28,13 +31,32 @@ export default function GitHubPanel() {
           </RButton>
         </RGridItem>
       </RGrid>
-      <RText>Target Repositories</RText>
+      <RRow gap={1} align='center'>
+        <RText>Repositories</RText>
+        <RIconButton>
+          <RAddIcon size='small' />
+        </RIconButton>
+      </RRow>
       <RTable
         columns={[
-          { name: 'Owner', align: 'left', width: 100 },
-          { name: 'Repository', align: 'left', width: 200 },
+          { name: 'owner', cell: 'Owner', align: 'left', width: 100 },
+          { name: 'repository', cell: 'Repository', align: 'left' },
+          { name: 'actions', align: 'center', width: 64 },
         ]}
-        rows={[{ id: '1', cells: { Owner: 'Repo 1', Repository: 'Repo 1' } }]}
+        rows={[
+          {
+            id: '1',
+            cells: {
+              owner: 'pkshimizu',
+              repository: 'reportify.tauri',
+              actions: (
+                <RIconButton>
+                  <RRemoveIcon />
+                </RIconButton>
+              ),
+            },
+          },
+        ]}
       />
     </RColumn>
   );
