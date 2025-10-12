@@ -10,9 +10,13 @@ import { RColumn, RRow } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
 import RGridItem from '@/components/layout/grid-item';
 import { useState } from 'react';
+import GitHubRepositorySelectDialog from './github-repository-select-dialog';
 
 export default function GitHubPanel() {
   const [privateAccessToken, setPrivateAccessToken] = useState<string>('');
+  const [openRepositorySelectDialog, setOpenRepositorySelectDialog] =
+    useState(false);
+
   return (
     <RColumn fullWidth gap={1}>
       <RGrid columns={['auto', '1fr', 'auto']} gap={1} alignContent='start'>
@@ -45,9 +49,13 @@ export default function GitHubPanel() {
       </RRow>
       <RRow gap={1} align='center'>
         <RText>Repositories</RText>
-        <RIconButton>
+        <RIconButton onClick={() => setOpenRepositorySelectDialog(true)}>
           <RAddIcon size='small' />
         </RIconButton>
+        <GitHubRepositorySelectDialog
+          open={openRepositorySelectDialog}
+          onClose={() => setOpenRepositorySelectDialog(false)}
+        />
       </RRow>
       <RTable
         columns={[
