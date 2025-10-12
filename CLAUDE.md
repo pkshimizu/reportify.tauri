@@ -126,3 +126,21 @@ CLAUDE.mdが肥大化することを防ぐため、以下の基準で適切に�
   - `.cursor/rules/project-specific.md` - プロジェクト固有の設定
   - `.cursor/rules/references.md` - 参照すべきドキュメントのリスト
 - **CLAUDE.mdには概要とリンクのみ残す**: 詳細は個別ファイルへ
+
+## Git Commit Rules
+
+When committing changes with Claude Code, follow these rules:
+
+1. **コミットメッセージは日本語で書くこと**
+   - コミットメッセージは日本語で記述する
+   - 変更内容を分かりやすく簡潔に説明する
+   - コミットメッセージに、claudeで記述したことを載せない
+
+2. **コミット前にlintを実行すること**
+   - `yarn fix` を実行してエラーがないことを確認する
+   - リンタエラーがある場合は修正してからコミットする
+
+3. **差分を確認して簡潔なメッセージにすること**
+   - `git status` と `git diff` で変更内容を確認する
+   - 変更の目的と内容を簡潔にまとめたメッセージを作成する
+   - 複数の変更がある場合は、主要な変更にフォーカスする
