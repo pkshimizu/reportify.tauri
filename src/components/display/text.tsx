@@ -9,6 +9,7 @@ interface Props {
   size?: 'small' | 'medium' | 'large';
   whiteSpace?: 'normal' | 'nowrap' | 'pre' | 'pre-wrap' | 'pre-line';
   overflow?: 'hidden' | 'visible' | 'scroll' | 'auto';
+  style?: 'normal' | 'italic' | 'bold';
   children: Text;
 }
 
@@ -22,6 +23,7 @@ export default function RText(props: Props) {
         whiteSpace: props.whiteSpace,
         overflow: props.overflow,
         textOverflow: 'ellipsis',
+        fontWeight: props.style === 'bold' ? 'bold' : 'normal',
       }}
     >
       {props.children}

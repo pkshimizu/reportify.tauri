@@ -8,6 +8,15 @@ import { RColumn, RRow } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
 import { useState } from 'react';
 
+// 2つの日付が同じ日かどうかを判定
+function isSameDay(date1: Date, date2: Date): boolean {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+}
+
 // 本日を含む月曜日から始まる1週間の日付配列を取得
 function getWeekDates(baseDate: Date): Date[] {
   const date = new Date(baseDate);
@@ -32,13 +41,15 @@ function getDayOfWeekName(date: Date): string {
 }
 
 export default function ActivityWeeklyCalendar() {
-  const [baseDate, setBaseDate] = useState(new Date());
+  const today = new Date();
+  const [baseDate, setBaseDate] = useState(today);
 
   const weekDates = getWeekDates(baseDate);
   const days = weekDates.map(date => ({
     dayOfWeek: getDayOfWeekName(date),
     date: date.getDate(),
     github: 999,
+    isToday: isSameDay(date, today),
   }));
 
   const handlePrevWeek = () => {
@@ -92,7 +103,13 @@ export default function ActivityWeeklyCalendar() {
           >
             <RColumn align='center'>
               <RText color={color}>{day.dayOfWeek}</RText>
-              <RText color={color}>{day.date}</RText>
+              <RText
+                color={color}
+                size='large'
+                style={day.isToday ? 'bold' : 'normal'}
+              >
+                {day.date}
+              </RText>
               <RBox height={64} justify='center' align='center'>
                 <RColumn>
                   <RRow gap={1} align='center'>
