@@ -153,8 +153,10 @@ export default function ActivityWeeklyCalendar() {
         area={{ top: 1, left: 1, bottom: 3, right: 2 }}
         justify='center'
         align='center'
+        alignContent='center'
+        fullHeight
       >
-        <RButton onClick={handlePrevWeek}>
+        <RButton fullHeight onClick={handlePrevWeek}>
           <RPrevIcon size='small' />
         </RButton>
       </RGridItem>
@@ -202,8 +204,10 @@ export default function ActivityWeeklyCalendar() {
         area={{ top: 1, left: 9, bottom: 3, right: 10 }}
         justify='center'
         align='center'
+        alignContent='center'
+        fullHeight
       >
-        <RButton onClick={handleNextWeek}>
+        <RButton fullHeight onClick={handleNextWeek}>
           <RNextIcon />
         </RButton>
       </RGridItem>

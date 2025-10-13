@@ -10,7 +10,9 @@ interface Area {
 
 interface Props {
   align?: 'start' | 'end' | 'center' | 'stretch';
+  alignContent?: 'start' | 'end' | 'center' | 'stretch';
   justify?: 'start' | 'end' | 'center' | 'stretch';
+  justifyContent?: 'start' | 'end' | 'center' | 'stretch';
   area?: Area;
   fullWidth?: boolean;
   fullHeight?: boolean;
@@ -27,6 +29,8 @@ export default function RGridItem(props: Props) {
       sx={{
         alignSelf: props.align,
         justifySelf: props.justify,
+        alignContent: props.alignContent,
+        justifyContent: props.justifyContent,
         gridArea,
         ...(props.fullWidth && { width: '100%' }),
         ...(props.fullHeight && { height: '100%' }),
