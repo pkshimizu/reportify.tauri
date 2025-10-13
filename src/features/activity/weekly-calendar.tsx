@@ -92,6 +92,7 @@ export default function ActivityWeeklyCalendar() {
             : day.dayOfWeek === 'Sun'
               ? 'sun'
               : 'weekday';
+        const style = day.isToday ? 'bold' : 'normal';
         return (
           <RBox
             key={`${weekDates[index].toISOString()}-${day.date}`}
@@ -102,12 +103,10 @@ export default function ActivityWeeklyCalendar() {
             bgcolor={color}
           >
             <RColumn align='center'>
-              <RText color={color}>{day.dayOfWeek}</RText>
-              <RText
-                color={color}
-                size='large'
-                style={day.isToday ? 'bold' : 'normal'}
-              >
+              <RText color={color} style={style}>
+                {day.dayOfWeek}
+              </RText>
+              <RText color={color} size='large' style={style}>
                 {day.date}
               </RText>
               <RBox height={64} justify='center' align='center'>
