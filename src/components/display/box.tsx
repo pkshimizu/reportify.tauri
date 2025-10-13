@@ -6,6 +6,8 @@ interface Props {
   width?: number;
   height?: number;
   bgcolor?: Color;
+  fullWidth?: boolean;
+  fullHeight?: boolean;
   align?: 'center' | 'start' | 'end';
   justify?: 'center' | 'start' | 'end';
   aspectRatio?: number;
@@ -33,6 +35,8 @@ export default function RBox(props: Props) {
       sx={{
         ...(props.width && { width: props.width }),
         ...(props.height && { height: props.height }),
+        ...(props.fullWidth && { width: '100%' }),
+        ...(props.fullHeight && { height: '100%' }),
         ...(props.bgcolor && { bgcolor: bgColor(props.bgcolor) }),
         ...(props.align && { alignItems: props.align }),
         ...(props.justify && { justifyContent: props.justify }),

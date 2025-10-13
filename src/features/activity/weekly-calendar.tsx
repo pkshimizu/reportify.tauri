@@ -6,6 +6,7 @@ import RPrevIcon from '@/components/icons/prev';
 import RButton from '@/components/input/button';
 import { RColumn, RRow } from '@/components/layout/flex-box';
 import RGrid from '@/components/layout/grid';
+import RGridItem from '@/components/layout/grid-item';
 import { useState } from 'react';
 
 // 2つの日付が同じ日かどうかを判定
@@ -40,16 +41,36 @@ function getDayOfWeekName(date: Date): string {
   return days[date.getDay()];
 }
 
+function getMonthName(month: number): string {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  return months[month - 1];
+}
+
 export default function ActivityWeeklyCalendar() {
   const today = new Date();
   const [baseDate, setBaseDate] = useState(today);
 
   const weekDates = getWeekDates(baseDate);
-  const days = weekDates.map(date => ({
+  const days = weekDates.map((date, index) => ({
     dayOfWeek: getDayOfWeekName(date),
     date: date.getDate(),
+    month: getMonthName(date.getMonth() + 1),
     github: 999,
     isToday: isSameDay(date, today),
+    index: index,
   }));
 
   const handlePrevWeek = () => {
@@ -82,9 +103,25 @@ export default function ActivityWeeklyCalendar() {
       ]}
       gap={1}
     >
-      <RButton onClick={handlePrevWeek}>
-        <RPrevIcon size='small' />
-      </RButton>
+      <RGridItem
+        area={{ top: 1, left: 1, bottom: 3, right: 2 }}
+        justify='center'
+        align='center'
+      >
+        <RButton onClick={handlePrevWeek}>
+          <RPrevIcon size='small' />
+        </RButton>
+      </RGridItem>
+      <RGridItem
+        area={{ top: 1, left: 2, bottom: 2, right: 9 }}
+        justify='center'
+        align='center'
+        fullWidth
+      >
+        <RBox bgcolor='primary' fullWidth align='center' justify='center'>
+          <RText color='primary'>{days[0].month}</RText>
+        </RBox>
+      </RGridItem>
       {days.map((day, index) => {
         const color =
           day.dayOfWeek === 'Sat'
@@ -94,36 +131,45 @@ export default function ActivityWeeklyCalendar() {
               : 'weekday';
         const style = day.isToday ? 'bold' : 'normal';
         return (
-          <RBox
+          <RGridItem
             key={`${weekDates[index].toISOString()}-${day.date}`}
-            px={2}
-            py={1}
-            align='center'
-            justify='center'
-            bgcolor={color}
+            area={{
+              top: 2,
+              left: day.index + 2,
+              bottom: 3,
+              right: day.index + 3,
+            }}
           >
-            <RColumn align='center'>
-              <RText color={color} style={style}>
-                {day.dayOfWeek}
-              </RText>
-              <RText color={color} size='large' style={style}>
-                {day.date}
-              </RText>
-              <RBox height={64} justify='center' align='center'>
-                <RColumn>
-                  <RRow gap={1} align='center'>
-                    <RGitHubIcon />
-                    <RText>{day.github}</RText>
-                  </RRow>
-                </RColumn>
-              </RBox>
-            </RColumn>
-          </RBox>
+            <RBox px={2} py={1} align='center' justify='center' bgcolor={color}>
+              <RColumn align='center'>
+                <RText color={color} style={style}>
+                  {day.dayOfWeek}
+                </RText>
+                <RText color={color} size='large' style={style}>
+                  {day.date}
+                </RText>
+                <RBox height={64} justify='center' align='center'>
+                  <RColumn>
+                    <RRow gap={1} align='center'>
+                      <RGitHubIcon />
+                      <RText>{day.github}</RText>
+                    </RRow>
+                  </RColumn>
+                </RBox>
+              </RColumn>
+            </RBox>
+          </RGridItem>
         );
       })}
-      <RButton onClick={handleNextWeek}>
-        <RNextIcon />
-      </RButton>
+      <RGridItem
+        area={{ top: 1, left: 9, bottom: 3, right: 10 }}
+        justify='center'
+        align='center'
+      >
+        <RButton onClick={handleNextWeek}>
+          <RNextIcon />
+        </RButton>
+      </RGridItem>
     </RGrid>
   );
 }
