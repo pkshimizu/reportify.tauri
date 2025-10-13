@@ -59,6 +59,51 @@ function getMonthName(month: number): string {
   return months[month - 1];
 }
 
+function getMonthBars(days: { month: string; index: number }[]) {
+  if (days[0].month === days[days.length - 1].month) {
+    return [
+      <RGridItem
+        key='month-bar'
+        area={{ top: 1, left: 2, bottom: 2, right: 9 }}
+        justify='center'
+        align='center'
+        fullWidth
+      >
+        <RBox bgcolor='primary' fullWidth align='center' justify='center'>
+          <RText color='primary'>{days[0].month}</RText>
+        </RBox>
+      </RGridItem>,
+    ];
+  }
+
+  const nextMonthIndex = days.findIndex(day => day.month !== days[0].month);
+
+  return [
+    <RGridItem
+      key='month-bar'
+      area={{ top: 1, left: 2, bottom: 2, right: 2 + nextMonthIndex }}
+      justify='center'
+      align='center'
+      fullWidth
+    >
+      <RBox bgcolor='primary' fullWidth align='center' justify='center'>
+        <RText color='primary'>{days[0].month}</RText>
+      </RBox>
+    </RGridItem>,
+    <RGridItem
+      key='month-bar'
+      area={{ top: 1, left: 2 + nextMonthIndex, bottom: 2, right: 9 }}
+      justify='center'
+      align='center'
+      fullWidth
+    >
+      <RBox bgcolor='primary' fullWidth align='center' justify='center'>
+        <RText color='primary'>{days[nextMonthIndex].month}</RText>
+      </RBox>
+    </RGridItem>,
+  ];
+}
+
 export default function ActivityWeeklyCalendar() {
   const today = new Date();
   const [baseDate, setBaseDate] = useState(today);
@@ -101,7 +146,8 @@ export default function ActivityWeeklyCalendar() {
         '1fr',
         '64px',
       ]}
-      gap={1}
+      rowGap={0.5}
+      columnGap={1}
     >
       <RGridItem
         area={{ top: 1, left: 1, bottom: 3, right: 2 }}
@@ -112,16 +158,7 @@ export default function ActivityWeeklyCalendar() {
           <RPrevIcon size='small' />
         </RButton>
       </RGridItem>
-      <RGridItem
-        area={{ top: 1, left: 2, bottom: 2, right: 9 }}
-        justify='center'
-        align='center'
-        fullWidth
-      >
-        <RBox bgcolor='primary' fullWidth align='center' justify='center'>
-          <RText color='primary'>{days[0].month}</RText>
-        </RBox>
-      </RGridItem>
+      {getMonthBars(days).map(monthBar => monthBar)}
       {days.map((day, index) => {
         const color =
           day.dayOfWeek === 'Sat'
