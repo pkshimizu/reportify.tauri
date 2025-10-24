@@ -9,10 +9,18 @@ interface Props {
 }
 
 export default function RLink(props: Props) {
+  const external =
+    props.href.startsWith('http') ||
+    props.href.startsWith('mailto:') ||
+    props.href.startsWith('tel:');
+  const component = external ? 'a' : RouterLink;
+  const target = external ? '_blank' : '_self';
+
   return (
     <Link
-      component={RouterLink}
+      component={component}
       href={props.href}
+      target={target}
       sx={{
         textDecoration: 'none',
         color: 'inherit',
