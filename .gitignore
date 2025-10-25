@@ -22,3 +22,9 @@ dist-ssr
 *.sw?
 
 src-tauri/reportify.db
+
+# Rust build artifacts
+**/target/
+**/*.db
+**/*.db-shm
+**/*.db-wal

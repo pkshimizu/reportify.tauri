@@ -8,7 +8,8 @@
       "Bash(yarn tsc:*)",
       "Bash(ls:*)",
       "Bash(make:*)",
-      "Bash(yarn fix)"
+      "Bash(yarn fix)",
+      "Bash(cargo check:*)"
     ],
     "deny": []
   }

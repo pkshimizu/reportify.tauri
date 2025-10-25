@@ -9,6 +9,8 @@ allowed-tools:
   - Bash(git log:*)
 ---
 
+# commit command
+
 Git commit を実行してください。以下のルールに従ってください：
 
 ## Git Commit Rules
