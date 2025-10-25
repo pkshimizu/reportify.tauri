@@ -52,4 +52,4 @@ migrate-fresh:
 # Generate a new migration file
 migrate-generate:
 	@read -p "Enter migration name: " name; \
-	cd migration && sea-orm-cli migrate generate $$name
+	sea-orm-cli migrate generate -d migration $$name
