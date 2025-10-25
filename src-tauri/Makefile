@@ -1,6 +1,6 @@
 # Makefile for Rust backend development commands
 
-.PHONY: lint format check-format check clean test build
+.PHONY: lint format check-format check clean test build migrate-up migrate-down migrate-fresh migrate-generate
 
 # Run clippy linter with warnings as errors
 lint:
@@ -35,3 +35,21 @@ ci: check-format lint test
 
 # Development helper: format and run quick checks
 dev: format check
+
+# Database migration commands
+# Apply all pending migrations
+migrate-up:
+	cd migration && cargo run -- up
+
+# Rollback the last applied migration
+migrate-down:
+	cd migration && cargo run -- down
+
+# Drop all tables and re-run all migrations
+migrate-fresh:
+	cd migration && cargo run -- fresh
+
+# Generate a new migration file
+migrate-generate:
+	@read -p "Enter migration name: " name; \
+	cd migration && sea-orm-cli migrate generate $$name

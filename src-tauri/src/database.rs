@@ -1,3 +1,4 @@
+use migration::{Migrator, MigratorTrait};
 use once_cell::sync::OnceCell;
 use sea_orm::{Database, DatabaseConnection, DbErr};
 use std::path::PathBuf;
@@ -23,14 +24,27 @@ fn get_database_path() -> Result<PathBuf, String> {
     Ok(db_path)
 }
 
+/// データベース接続URL文字列を取得する（マイグレーション用）
+///
+/// # Errors
+/// データベースパスの取得に失敗した場合にエラーを返す
+pub fn get_database_url() -> Result<String, String> {
+    let db_path = get_database_path()?;
+    Ok(format!("sqlite://{}?mode=rwc", db_path.display()))
+}
+
 /// データベース接続を初期化する
 pub async fn initialize_database() -> Result<(), DbErr> {
-    let db_path = get_database_path().map_err(DbErr::Custom)?;
+    let db_url = get_database_url().map_err(DbErr::Custom)?;
 
-    log::info!("Initializing database at: {db_path:?}");
+    log::info!("Initializing database at: {db_url}");
 
-    let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
     let db = Database::connect(&db_url).await?;
+
+    // マイグレーションを実行
+    log::info!("Running database migrations...");
+    Migrator::up(&db, None).await?;
+    log::info!("Database migrations completed");
 
     DB_CONNECTION
         .set(db)

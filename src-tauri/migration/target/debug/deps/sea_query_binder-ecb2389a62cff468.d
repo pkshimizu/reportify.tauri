@@ -1,0 +1,10 @@
+/Users/kenji/Projects/noncore.net/reportify.tauri/src-tauri/migration/target/debug/deps/sea_query_binder-ecb2389a62cff468.d: /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/lib.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx_sqlite.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/values.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx.rs
+
+/Users/kenji/Projects/noncore.net/reportify.tauri/src-tauri/migration/target/debug/deps/libsea_query_binder-ecb2389a62cff468.rlib: /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/lib.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx_sqlite.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/values.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx.rs
+
+/Users/kenji/Projects/noncore.net/reportify.tauri/src-tauri/migration/target/debug/deps/libsea_query_binder-ecb2389a62cff468.rmeta: /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/lib.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx_sqlite.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/values.rs /Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx.rs
+
+/Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/lib.rs:
+/Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx_sqlite.rs:
+/Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/values.rs:
+/Users/kenji/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sea-query-binder-0.7.0/src/sqlx.rs:

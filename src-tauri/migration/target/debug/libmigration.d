@@ -1,0 +1,1 @@
+/Users/kenji/Projects/noncore.net/reportify.tauri/src-tauri/migration/target/debug/libmigration.rlib: /Users/kenji/Projects/noncore.net/reportify.tauri/src-tauri/migration/src/lib.rs /Users/kenji/Projects/noncore.net/reportify.tauri/src-tauri/migration/src/m20220101_000001_create_table.rs
